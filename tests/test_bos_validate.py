@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tools.bos_validate import compute_revision, validate_space
+from tools.bos_validate import compute_revision, universe_descriptor, validate_space
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -128,6 +128,112 @@ class BOSValidatorCountervectors(unittest.TestCase):
         digest = compute_revision(text.encode())
         path.write_text(text.replace("0" * 64, digest, 1))
         self.assertNotIn("REVISION", self.codes())
+
+    def test_body_revision_lookalike_is_ignored(self) -> None:
+        path = self.root / "atoms/risk/meta-recursion.bos.md"
+        text = path.read_text()
+        text = text.replace(
+            "relations: []\n",
+            'revision: "sha256:' + ("0" * 64) + '"\nrelations: []\n',
+            1,
+        )
+        text = text.rstrip("\n") + '\n\n```yaml\nrevision: "sha256:' + ("f" * 64) + '"\n```\n'
+        digest = compute_revision(text.encode())
+        path.write_text(text.replace("0" * 64, digest, 1))
+        self.assertNotIn("REVISION", self.codes())
+
+    def test_crlf_atom_fails(self) -> None:
+        path = self.root / "atoms/risk/meta-recursion.bos.md"
+        path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+        self.assertIn("BYTES", self.codes())
+
+    def test_competing_superseders_fail(self) -> None:
+        for relative in (
+            "atoms/risk/meta-recursion.bos.md",
+            "atoms/risk/ontology-explosion.bos.md",
+        ):
+            self.mutate(
+                relative,
+                "relations: []",
+                "relations:\n"
+                "  - predicate: supersedes\n"
+                "    object: bos:risk:false-replay",
+            )
+        self.assertIn("SUPERSESSION_CONFLICT", self.codes())
+
+    def test_expired_reason_cannot_support_decision(self) -> None:
+        self.mutate(
+            "atoms/hypothesis/agent-decision-evidence-commercial-wedge.bos.md",
+            'valid_until: "2026-10-28T00:00:00Z"',
+            'valid_until: "2026-07-27T00:00:00Z"',
+        )
+        path = self.root / "atoms/decision/expired-reason.bos.md"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            """---
+id: bos:decision:expired-reason
+schema: bos.atom@v0.2
+kind: decision
+states:
+  governance: bos:status:governance:proposed
+  maturity: bos:status:maturity:research
+title: Expired reason decision fixture
+created_at: "2026-07-28T00:00:00Z"
+created_by:
+  - bos:actor:human:s0fractal
+scope: [bos]
+disclosure:
+  classification: public
+  payload_mode: embedded
+  retention: review
+relations: []
+payload:
+  question: "May an expired claim authorize a current decision?"
+  choice: "No"
+  reasons:
+    - bos:hypothesis:agent-decision-evidence-commercial-wedge
+  authority: bos:actor:human:s0fractal
+  context_cut: bos:context_cut:bos-0001-rev1
+---
+
+# Expired reason fixture
+"""
+        )
+        self.assertIn("EXPIRED_REASON", self.codes())
+
+    def test_commitment_mode_requires_named_private_nonce_scheme(self) -> None:
+        self.mutate(
+            "atoms/status/lifecycle-recorded.bos.md",
+            """disclosure:
+  classification: public
+  payload_mode: embedded
+  retention: indefinite
+""",
+            """disclosure:
+  classification: secret
+  payload_mode: commitment
+  retention: indefinite
+  commitment: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  private_locator: "private://meta-recursion"
+  encryption: "age"
+""",
+        )
+        self.assertIn("SCHEMA", self.codes())
+        self.mutate(
+            "atoms/status/lifecycle-recorded.bos.md",
+            '  commitment: "sha256:',
+            "  commitment_scheme: sha256-private-nonce-payload-v1\n"
+            '  commitment: "sha256:',
+        )
+        self.assertNotIn("SCHEMA", self.codes())
+
+    def test_universe_digest_changes_with_input_bytes(self) -> None:
+        before_entries, before_digest = universe_descriptor(self.root)
+        path = self.root / "atoms/risk/meta-recursion.bos.md"
+        path.write_text(path.read_text().replace("Meta-recursion", "Meta recursion", 1))
+        after_entries, after_digest = universe_descriptor(self.root)
+        self.assertEqual(len(before_entries), len(after_entries))
+        self.assertNotEqual(before_digest, after_digest)
 
     def test_duplicate_yaml_key_fails(self) -> None:
         self.mutate(

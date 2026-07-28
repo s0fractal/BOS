@@ -1,0 +1,1204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://s0fractal.dev/bos/schemas/bos-atom-v0.3.schema.json",
+  "title": "BOS Atom v0.3",
+  "description": "Strict decoded-frontmatter contract for one BOS-0001 rev-3 atom.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "schema",
+    "kind",
+    "title",
+    "created_at",
+    "created_by",
+    "scope",
+    "disclosure",
+    "relations",
+    "payload"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "schema": {
+      "const": "bos.atom@v0.3"
+    },
+    "kind": {
+      "enum": [
+        "actor",
+        "asset",
+        "claim",
+        "hypothesis",
+        "risk",
+        "requirement",
+        "evidence",
+        "proposal",
+        "decision",
+        "adoption",
+        "action",
+        "outcome",
+        "context_cut",
+        "trajectory",
+        "relation_claim",
+        "countervector",
+        "principle",
+        "goal",
+        "vehicle",
+        "status"
+      ]
+    },
+    "states": {
+      "$ref": "#/$defs/states"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_by": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/actor_ref"
+      }
+    },
+    "scope": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "bos",
+          "ecosystem",
+          "autonomy",
+          "business",
+          "process",
+          "machine-experience",
+          "privacy",
+          "warrant",
+          "sigma-glyph",
+          "trinity"
+        ]
+      }
+    },
+    "disclosure": {
+      "$ref": "#/$defs/disclosure"
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "relations": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/structural_relation"
+      }
+    },
+    "payload": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "not": {
+              "const": "status"
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "states"
+        ]
+      }
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "kind": {
+              "const": "actor"
+            },
+            "payload": {
+              "$ref": "#/$defs/actor_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "asset"
+            },
+            "payload": {
+              "$ref": "#/$defs/asset_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "enum": [
+                "claim",
+                "hypothesis"
+              ]
+            },
+            "payload": {
+              "$ref": "#/$defs/assertion_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "risk"
+            },
+            "payload": {
+              "$ref": "#/$defs/risk_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "requirement"
+            },
+            "payload": {
+              "$ref": "#/$defs/requirement_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "evidence"
+            },
+            "payload": {
+              "$ref": "#/$defs/evidence_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "proposal"
+            },
+            "payload": {
+              "$ref": "#/$defs/proposal_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "decision"
+            },
+            "payload": {
+              "$ref": "#/$defs/decision_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "adoption"
+            },
+            "payload": {
+              "$ref": "#/$defs/adoption_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "action"
+            },
+            "payload": {
+              "$ref": "#/$defs/action_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "outcome"
+            },
+            "payload": {
+              "$ref": "#/$defs/outcome_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "context_cut"
+            },
+            "payload": {
+              "$ref": "#/$defs/context_cut_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "trajectory"
+            },
+            "payload": {
+              "$ref": "#/$defs/trajectory_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "relation_claim"
+            },
+            "payload": {
+              "$ref": "#/$defs/relation_claim_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "countervector"
+            },
+            "payload": {
+              "$ref": "#/$defs/countervector_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "principle"
+            },
+            "payload": {
+              "$ref": "#/$defs/principle_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "goal"
+            },
+            "payload": {
+              "$ref": "#/$defs/goal_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "vehicle"
+            },
+            "payload": {
+              "$ref": "#/$defs/vehicle_payload"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "status"
+            },
+            "payload": {
+              "$ref": "#/$defs/status_payload"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^bos:[a-z][a-z0-9_-]*(?::[a-z0-9][a-z0-9._-]*)+$"
+    },
+    "actor_ref": {
+      "type": "string",
+      "pattern": "^bos:actor:(human|model|service):[a-z0-9][a-z0-9._-]*$"
+    },
+    "states": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "governance": {
+          "$ref": "#/$defs/id"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/id"
+        },
+        "maturity": {
+          "$ref": "#/$defs/id"
+        },
+        "priority": {
+          "$ref": "#/$defs/id"
+        },
+        "health": {
+          "$ref": "#/$defs/id"
+        },
+        "freshness": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "payload_mode",
+        "retention"
+      ],
+      "properties": {
+        "classification": {
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "secret"
+          ]
+        },
+        "payload_mode": {
+          "enum": [
+            "embedded",
+            "commitment"
+          ]
+        },
+        "retention": {
+          "enum": [
+            "indefinite",
+            "review",
+            "delete-on-request"
+          ]
+        },
+        "commitment": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "commitment_scheme": {
+          "const": "sha256-private-nonce-payload-v1"
+        },
+        "private_locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "encryption": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "classification": {
+                "enum": [
+                  "confidential",
+                  "secret"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload_mode": {
+                "const": "commitment"
+              }
+            },
+            "required": [
+              "commitment",
+              "commitment_scheme",
+              "private_locator",
+              "encryption"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "payload_mode": {
+                "const": "commitment"
+              }
+            },
+            "required": [
+              "payload_mode"
+            ]
+          },
+          "then": {
+            "required": [
+              "commitment",
+              "commitment_scheme",
+              "private_locator",
+              "encryption"
+            ]
+          }
+        }
+      ]
+    },
+    "structural_relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predicate",
+        "object"
+      ],
+      "properties": {
+        "predicate": {
+          "enum": [
+            "contains",
+            "depends_on",
+            "supersedes",
+            "derived_from",
+            "targets",
+            "produces",
+            "observes",
+            "changes",
+            "implements",
+            "governed_by",
+            "binds"
+          ]
+        },
+        "object": {
+          "$ref": "#/$defs/id"
+        },
+        "context": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "actor_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor_class",
+        "handle",
+        "identity_basis"
+      ],
+      "properties": {
+        "actor_class": {
+          "enum": [
+            "human",
+            "model",
+            "service"
+          ]
+        },
+        "handle": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_basis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "external_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "asset_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_kind",
+        "locator"
+      ],
+      "properties": {
+        "asset_kind": {
+          "enum": [
+            "repository",
+            "specification",
+            "capability",
+            "implementation",
+            "release",
+            "dataset",
+            "service",
+            "research",
+            "contract"
+          ]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "assertion_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "confidence",
+        "falsifier"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "falsifier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "valid_until": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "risk_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "likelihood",
+        "impact",
+        "mitigation"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "likelihood": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "impact": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "mitigation": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "requirement_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "level",
+        "verification_class",
+        "verification"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "level": {
+          "enum": [
+            "MUST",
+            "SHOULD",
+            "MAY"
+          ]
+        },
+        "verification_class": {
+          "enum": [
+            "mechanical",
+            "adjudicated",
+            "research"
+          ]
+        },
+        "verification": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "evidence_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_kind",
+        "source_fidelity",
+        "locator",
+        "observed_at"
+      ],
+      "properties": {
+        "evidence_kind": {
+          "enum": [
+            "commit",
+            "test_report",
+            "review",
+            "research",
+            "external_source",
+            "receipt"
+          ]
+        },
+        "source_fidelity": {
+          "enum": [
+            "exact",
+            "excerpt",
+            "summary",
+            "synthesis",
+            "memory"
+          ]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "valid_until": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "proposal_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question",
+        "proposal",
+        "reasons",
+        "acceptance"
+      ],
+      "properties": {
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proposal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "acceptance": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "decision_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question",
+        "choice",
+        "reasons",
+        "authority",
+        "context_cut"
+      ],
+      "properties": {
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "choice": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "authority": {
+          "$ref": "#/$defs/id"
+        },
+        "context_cut": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "adoption_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject",
+        "subject_revision",
+        "mode",
+        "authority",
+        "context_cut",
+        "statement"
+      ],
+      "properties": {
+        "subject": {
+          "$ref": "#/$defs/id"
+        },
+        "subject_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "mode": {
+          "enum": [
+            "genesis-human",
+            "warrant"
+          ]
+        },
+        "authority": {
+          "$ref": "#/$defs/id"
+        },
+        "context_cut": {
+          "$ref": "#/$defs/id"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "action_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verb",
+        "target",
+        "authority",
+        "acceptance"
+      ],
+      "properties": {
+        "verb": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "$ref": "#/$defs/id"
+        },
+        "authority": {
+          "$ref": "#/$defs/id"
+        },
+        "acceptance": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "outcome_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "evidence"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "context_cut_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repositories",
+        "sources",
+        "anchors"
+      ],
+      "properties": {
+        "repositories": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "asset",
+              "commit",
+              "dirty"
+            ],
+            "properties": {
+              "asset": {
+                "$ref": "#/$defs/id"
+              },
+              "commit": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              "dirty": {
+                "const": false
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "anchors": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "value"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "git",
+                  "bitcoin",
+                  "wall_clock",
+                  "warrant"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "trajectory_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor",
+        "objective",
+        "context_cut",
+        "supplied_set",
+        "produced",
+        "output_evidence"
+      ],
+      "properties": {
+        "actor": {
+          "$ref": "#/$defs/actor_ref"
+        },
+        "objective": {
+          "type": "string",
+          "minLength": 1
+        },
+        "context_cut": {
+          "$ref": "#/$defs/id"
+        },
+        "supplied_set": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "produced": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "output_evidence": {
+          "$ref": "#/$defs/id"
+        },
+        "selected_action": {
+          "$ref": "#/$defs/id"
+        },
+        "receipt": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "relation_claim_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject",
+        "predicate",
+        "object",
+        "confidence",
+        "falsifier",
+        "observed_in"
+      ],
+      "properties": {
+        "subject": {
+          "$ref": "#/$defs/id"
+        },
+        "predicate": {
+          "enum": [
+            "supports",
+            "refutes",
+            "mitigates",
+            "motivates",
+            "enables",
+            "conflicts_with",
+            "addresses",
+            "predicts",
+            "constrains",
+            "equivalent_to"
+          ]
+        },
+        "object": {
+          "$ref": "#/$defs/id"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "falsifier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "observed_in": {
+          "$ref": "#/$defs/id"
+        },
+        "valid_until": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "countervector_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "construction",
+        "expected_failure",
+        "verification_class",
+        "verification"
+      ],
+      "properties": {
+        "target": {
+          "$ref": "#/$defs/id"
+        },
+        "construction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_failure": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_class": {
+          "enum": [
+            "mechanical",
+            "adjudicated",
+            "research"
+          ]
+        },
+        "verification": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "principle_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "implications"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "implications": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "goal_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "success_signals"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "success_signals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "vehicle_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vehicle_kind",
+        "vehicle_revision",
+        "includes"
+      ],
+      "properties": {
+        "vehicle_kind": {
+          "enum": [
+            "WRT",
+            "ADR",
+            "SPEC",
+            "ROADMAP",
+            "RESEARCH",
+            "RFC"
+          ]
+        },
+        "vehicle_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "includes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "status_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "axis",
+        "value",
+        "semantics",
+        "transitions_to"
+      ],
+      "properties": {
+        "axis": {
+          "enum": [
+            "governance",
+            "lifecycle",
+            "maturity",
+            "priority",
+            "health",
+            "freshness"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transitions_to": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "confidence": {
+      "enum": [
+        "speculative",
+        "low",
+        "medium",
+        "high"
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 ---
 id: bos:requirement:verification-boundaries
-schema: bos.atom@v0.2
+schema: bos.atom@v0.3
 kind: requirement
 states:
   governance: bos:status:governance:proposed
@@ -25,6 +25,7 @@ payload:
     - "A mechanical check names an executable deterministic rule."
     - "An adjudicated check names the authority that interprets it before adoption."
     - "A research check cannot block mechanically unless a later atom defines the missing contract."
+    - "A machine-readable validator report binds its exact input universe and says when no clean historical cut is bound."
 ---
 
 # Verification boundaries

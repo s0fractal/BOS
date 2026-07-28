@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate the active BOS-0001 atom graph.
 
-This validator deliberately covers mechanical V0/V1 boundaries only. It does
+This validator covers the implemented mechanical subset of V0/V1/V3. It does
 not claim semantic truth, global completeness, adoption, or historical Git
 membership beyond the active checkout.
 """
@@ -14,6 +14,7 @@ import json
 import re
 import sys
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import unquote
@@ -22,8 +23,10 @@ import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
 
-SCHEMA_TAG = "bos.atom@v0.2"
-SCHEMA_PATH = Path("schemas/bos-atom-v0.2.schema.json")
+SCHEMA_PATHS = {
+    "bos.atom@v0.2": Path("schemas/bos-atom-v0.2.schema.json"),
+    "bos.atom@v0.3": Path("schemas/bos-atom-v0.3.schema.json"),
+}
 ID_RE = re.compile(r"^bos:[a-z][a-z0-9_-]*(?::[a-z0-9][a-z0-9._-]*)+$")
 ACTOR_RE = re.compile(r"^bos:actor:(human|model|service):[a-z0-9][a-z0-9._-]*$")
 REVISION_LINE_RE = re.compile(
@@ -112,11 +115,16 @@ def load_record(path: Path) -> Record:
 
 
 def compute_revision(raw: bytes) -> str:
-    matches = list(REVISION_LINE_RE.finditer(raw))
+    frontmatter_raw, _ = _frontmatter_bytes(raw)
+    matches = list(REVISION_LINE_RE.finditer(frontmatter_raw))
     if len(matches) != 1:
-        raise ValueError("adopted revision requires exactly one lexical revision line")
+        raise ValueError(
+            "adopted revision requires exactly one frontmatter revision line"
+        )
     match = matches[0]
-    normalized = raw[: match.start(1)] + (b"0" * 64) + raw[match.end(1) :]
+    digest_start = 4 + match.start(1)
+    digest_end = 4 + match.end(1)
+    normalized = raw[:digest_start] + (b"0" * 64) + raw[digest_end:]
     return hashlib.sha256(normalized).hexdigest()
 
 
@@ -124,6 +132,45 @@ def active_atom_paths(root: Path) -> list[Path]:
     return sorted((root / "atoms").rglob("*.bos.md")) + sorted(
         (root / "spec").rglob("*.bos.md")
     )
+
+
+def universe_descriptor(root: Path) -> tuple[list[dict[str, str]], str]:
+    root = root.resolve()
+    paths = set(active_atom_paths(root))
+    paths.update(root / relative for relative in SCHEMA_PATHS.values())
+    for path in active_atom_paths(root):
+        try:
+            record = load_record(path)
+        except Exception:
+            continue
+        if record.kind != "evidence":
+            continue
+        locator = record.frontmatter.get("payload", {}).get("locator")
+        if not isinstance(locator, str) or locator.startswith(("http://", "https://")):
+            continue
+        evidence_path = (root / locator).resolve()
+        if evidence_path.is_file() and evidence_path.is_relative_to(root):
+            paths.add(evidence_path)
+    entries = [
+        {
+            "path": str(path.relative_to(root)),
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        }
+        for path in sorted(paths)
+    ]
+    encoded = json.dumps(
+        entries, ensure_ascii=True, separators=(",", ":"), sort_keys=True
+    ).encode()
+    return entries, hashlib.sha256(encoded).hexdigest()
+
+
+def _timestamp(value: Any) -> datetime | None:
+    if not isinstance(value, str):
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
 
 
 def _add(
@@ -313,14 +360,17 @@ SEMANTIC_DOMAIN_RANGE: dict[str, tuple[set[str], set[str]]] = {
 def validate_space(root: Path) -> list[Finding]:
     root = root.resolve()
     findings: list[Finding] = []
-    schema_path = root / SCHEMA_PATH
-    try:
-        schema = json.loads(schema_path.read_text(encoding="utf-8"))
-        schema_validator = Draft202012Validator(
-            schema, format_checker=FormatChecker()
-        )
-    except Exception as exc:
-        _add(findings, root, schema_path, "SCHEMA", str(exc))
+    schema_validators: dict[str, Draft202012Validator] = {}
+    for tag, relative in SCHEMA_PATHS.items():
+        schema_path = root / relative
+        try:
+            schema = json.loads(schema_path.read_text(encoding="utf-8"))
+            schema_validators[tag] = Draft202012Validator(
+                schema, format_checker=FormatChecker()
+            )
+        except Exception as exc:
+            _add(findings, root, schema_path, "SCHEMA", str(exc))
+    if findings:
         return sorted(findings)
 
     records: dict[str, Record] = {}
@@ -330,11 +380,18 @@ def validate_space(root: Path) -> list[Finding]:
         except Exception as exc:
             _add(findings, root, path, "BYTES", str(exc))
             continue
-        for error in schema_validator.iter_errors(record.frontmatter):
-            location = ".".join(str(part) for part in error.absolute_path) or "<root>"
-            _add(findings, root, path, "SCHEMA", f"{location}: {error.message}")
-        if record.frontmatter.get("schema") != SCHEMA_TAG:
+        tag = record.frontmatter.get("schema")
+        schema_validator = schema_validators.get(tag)
+        if schema_validator is None:
             _add(findings, root, path, "SCHEMA_TAG", "unsupported schema tag")
+        else:
+            for error in schema_validator.iter_errors(record.frontmatter):
+                location = (
+                    ".".join(str(part) for part in error.absolute_path) or "<root>"
+                )
+                _add(
+                    findings, root, path, "SCHEMA", f"{location}: {error.message}"
+                )
         if record.ident in records:
             _add(
                 findings,
@@ -548,6 +605,27 @@ def validate_space(root: Path) -> list[Finding]:
                     "DECISION_CONTEXT",
                     "decision context_cut does not resolve to a context cut",
                 )
+            decision_created = _timestamp(record.frontmatter.get("created_at"))
+            for reason_id in record.frontmatter["payload"]["reasons"]:
+                reason = records.get(reason_id)
+                if reason is None:
+                    continue
+                valid_until = reason.frontmatter.get("payload", {}).get("valid_until")
+                if valid_until is None:
+                    continue
+                expires = _timestamp(valid_until)
+                if (
+                    decision_created is not None
+                    and expires is not None
+                    and decision_created > expires
+                ):
+                    _add(
+                        findings,
+                        root,
+                        record.path,
+                        "EXPIRED_REASON",
+                        f"decision cites {reason_id} after {valid_until}",
+                    )
 
         if record.kind == "action":
             authority = records.get(record.frontmatter["payload"]["authority"])
@@ -602,6 +680,25 @@ def validate_space(root: Path) -> list[Finding]:
                     f"broken local link: {link}",
                 )
 
+    superseders: dict[str, list[Record]] = {}
+    for record in records.values():
+        for relation in record.frontmatter.get("relations", []):
+            if isinstance(relation, dict) and relation.get("predicate") == "supersedes":
+                target = relation.get("object")
+                if isinstance(target, str):
+                    superseders.setdefault(target, []).append(record)
+    for target, successors in superseders.items():
+        if len(successors) > 1:
+            names = ", ".join(sorted(record.ident for record in successors))
+            for record in successors:
+                _add(
+                    findings,
+                    root,
+                    record.path,
+                    "SUPERSESSION_CONFLICT",
+                    f"{target} has competing successors: {names}",
+                )
+
     if "bos:vehicle:bos-0001" not in records:
         _add(
             findings,
@@ -621,9 +718,15 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     findings = validate_space(args.root)
     if args.json:
+        universe, universe_sha256 = universe_descriptor(args.root)
         print(
             json.dumps(
                 {
+                    "report": "bos.validate@v0",
+                    "verdict_scope": "active-checkout-diagnostic",
+                    "cut": None,
+                    "universe": universe,
+                    "universe_sha256": universe_sha256,
                     "ok": not findings,
                     "errors": len(findings),
                     "findings": [

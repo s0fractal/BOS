@@ -1,6 +1,6 @@
 ---
 id: bos:requirement:canonical-atom-bytes
-schema: bos.atom@v0.2
+schema: bos.atom@v0.3
 kind: requirement
 states:
   governance: bos:status:governance:proposed
@@ -23,9 +23,10 @@ payload:
   verification_class: mechanical
   verification:
     - "Reject BOM, CRLF, invalid UTF-8, missing final LF, and duplicate YAML keys."
-    - "Require exactly one top-level revision field for adopted atoms."
+    - "Require exactly one unindented revision field inside frontmatter for adopted atoms; ignore body look-alikes."
     - "Replace only its 64 lowercase hex digits with 64 zeroes before hashing the complete file."
     - "Require the computed digest to equal the declared revision."
+    - "Require repository .gitattributes to pin .bos.md files to LF."
 ---
 
 # Canonical atom bytes

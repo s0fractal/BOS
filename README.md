@@ -20,10 +20,11 @@ proposed a path, what authority allowed an action, and what happened next.
 
 - [`spec/BOS-0001-core.bos.md`](spec/BOS-0001-core.bos.md) — draft core
   specification.
-- [`schemas/bos-atom-v0.2.schema.json`](schemas/bos-atom-v0.2.schema.json) —
-  strict machine envelope and payload types.
+- [`schemas/bos-atom-v0.3.schema.json`](schemas/bos-atom-v0.3.schema.json) —
+  current strict machine envelope and payload types; v0.2 remains unchanged
+  for revision-2 records.
 - [`atoms/`](atoms/) — first-class normative atoms consumed by BOS-0001.
-- [`experiments/BOS-E0001-multimodel-decision-trace.md`](experiments/BOS-E0001-multimodel-decision-trace.md)
+- [`bos:vehicle:bos-e0001`](atoms/vehicle/bos-e0001-multimodel-decision-trace.bos.md)
   — first dogfood experiment.
 - [`raw/`](raw/) — research and captures. Raw material is evidence, not
   authority.
@@ -38,8 +39,9 @@ uv run python tools/bos_validate.py
 uv run python -m unittest -v tests.test_bos_validate
 ```
 
-The validator covers mechanical V0/V1 syntax and active-graph integrity. It
-does not claim semantic truth, global completeness, or governance adoption.
+The validator covers the implemented mechanical subset of V0/V1/V3 and binds
+its JSON report to the exact active-file universe. It does not claim semantic
+truth, global completeness, a clean historical cut, or governance adoption.
 
 ## Kernel sentence
 

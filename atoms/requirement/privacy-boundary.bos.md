@@ -1,6 +1,6 @@
 ---
 id: bos:requirement:privacy-boundary
-schema: bos.atom@v0.2
+schema: bos.atom@v0.3
 kind: requirement
 states:
   governance: bos:status:governance:proposed
@@ -18,12 +18,12 @@ disclosure:
   retention: indefinite
 relations: []
 payload:
-  statement: "Confidential and secret material MUST be represented by a public-safe descriptor plus a content commitment and controlled encrypted locator; it MUST NOT be embedded as plaintext in an immutable BOS atom."
+  statement: "Confidential and secret material MUST be represented by a public-safe descriptor plus a domain-separated commitment over a private random nonce and canonical payload bytes, with a controlled encrypted locator; it MUST NOT be embedded as plaintext in an immutable BOS atom."
   level: MUST
   verification_class: mechanical
   verification:
     - "Reject confidential or secret disclosure with embedded payload mode."
-    - "Require commitment, private locator, and encryption descriptor."
+    - "Require commitment_scheme sha256-private-nonce-payload-v1, commitment, private locator, and encryption descriptor."
     - "Warn that tombstones cannot erase plaintext already copied outside the controlled store."
 ---
 

@@ -1,12 +1,12 @@
 ---
 id: bos:vehicle:bos-0001
-schema: bos.atom@v0.2
+schema: bos.atom@v0.3
 kind: vehicle
 states:
   governance: bos:status:governance:proposed
   maturity: bos:status:maturity:research
   priority: bos:status:priority:now
-title: "BOS-0001 rev 2: Typed Decision Graph Core"
+title: "BOS-0001 rev 3: Typed Decision Graph Core"
 created_at: "2026-07-28T00:00:00Z"
 created_by:
   - bos:actor:human:s0fractal
@@ -19,15 +19,20 @@ disclosure:
 relations:
   - predicate: derived_from
     object: bos:trajectory:kimi-bos-0001-rev1-review
+  - predicate: derived_from
+    object: bos:trajectory:kimi-bos-0001-rev2-review
+  - predicate: derived_from
+    object: bos:trajectory:codex-bos-0001-rev3-amendment
 payload:
   vehicle_kind: SPEC
-  vehicle_revision: 2
+  vehicle_revision: 3
   includes:
     - bos:status:governance:proposed
     - bos:status:maturity:research
     - bos:status:priority:now
     - bos:status:health:unknown
     - bos:status:freshness:current
+    - bos:status:lifecycle:recorded
     - bos:actor:human:s0fractal
     - bos:actor:model:codex
     - bos:actor:model:kimi-k3
@@ -60,6 +65,36 @@ payload:
     - bos:evidence:research:warrant-sigma-commercial-2026-07-28
     - bos:context_cut:bos-0001-rev1
     - bos:trajectory:kimi-bos-0001-rev1-review
+    - bos:evidence:review:kimi-bos-0001-rev2
+    - bos:context_cut:bos-0001-rev2
+    - bos:trajectory:kimi-bos-0001-rev2-review
+    - bos:context_cut:bos-0001-rev3-input
+    - bos:evidence:review:codex-bos-0001-rev2-adjudication
+    - bos:trajectory:codex-bos-0001-rev3-amendment
+    - bos:relation_claim:kimi-rev2-review-supports-genesis-risk
+    - bos:relation_claim:kimi-rev2-review-supports-experiment-outside-graph
+    - bos:relation_claim:kimi-rev2-review-supports-commitment-risk
+    - bos:risk:genesis-unauthenticated-bootstrap
+    - bos:risk:revision-placeholder-timing-cycle
+    - bos:risk:revision-lexical-ambiguity
+    - bos:risk:verb-schema-collapse
+    - bos:risk:supersedes-uncontestable
+    - bos:risk:symmetric-predicate-semantics
+    - bos:risk:duplicate-id-prohibition-multirepo
+    - bos:risk:commitment-low-entropy
+    - bos:risk:freshness-without-teeth
+    - bos:risk:lifecycle-axis-empty
+    - bos:risk:experiment-outside-graph
+    - bos:risk:validator-verdict-unbound-universe
+    - bos:countervector:forged-genesis-adoption
+    - bos:countervector:double-revision-line
+    - bos:countervector:dual-supersession
+    - bos:countervector:reverse-symmetric-edge
+    - bos:countervector:expired-claim-supports-decision
+    - bos:countervector:cross-repo-mirror-duplicate
+    - bos:countervector:rubric-disagreement-no-verdict
+    - bos:countervector:low-entropy-commitment
+    - bos:vehicle:bos-e0001
     - bos:relation_claim:kimi-review-supports-bootstrap-risk
     - bos:relation_claim:experience-motivates-trajectory
     - bos:countervector:self-authorizing-genesis
@@ -68,17 +103,22 @@ payload:
     - bos:countervector:immutable-secret
 ---
 
-# BOS-0001 rev 2 — Typed Decision Graph Core
+# BOS-0001 rev 3 — Typed Decision Graph Core
 
 Status: **GENESIS CANDIDATE / NOT ADOPTED**
 
 Normative decoded-frontmatter schema:
-[`bos.atom@v0.2`](../schemas/bos-atom-v0.2.schema.json).
+[`bos.atom@v0.3`](../schemas/bos-atom-v0.3.schema.json). Revision-2 records
+remain valid under the unchanged historical
+[`bos.atom@v0.2`](../schemas/bos-atom-v0.2.schema.json) decoder.
 
 Revision 1 is preserved by Git commit
 `932077016f4544a6c455992ec93762dbc11c1b36`. Revision 2 incorporates the
 adversarial Kimi trajectory
 [`bos:trajectory:kimi-bos-0001-rev1-review`](../atoms/trajectory/kimi-bos-0001-rev1-review.bos.md).
+Revision 3 incorporates the second Kimi trajectory
+[`bos:trajectory:kimi-bos-0001-rev2-review`](../atoms/trajectory/kimi-bos-0001-rev2-review.bos.md)
+and remains a candidate, not an adoption.
 
 ## 0. Abstract
 
@@ -104,7 +144,7 @@ not permanent truth embedded in this specification.
 
 ### 1.1 No self-creation
 
-BOS-0001 revision 2 is a **genesis candidate**. Its `MUST` statements describe
+BOS-0001 revision 3 is a **genesis candidate**. Its `MUST` statements describe
 the contract that would apply after adoption; they do not manufacture the
 authority that adopts them.
 
@@ -127,12 +167,22 @@ A valid genesis adoption MUST:
 3. identify the exact candidate vehicle revision;
 4. bind a clean Git context cut containing that revision and all included
    atoms;
-5. be written only after an explicit human instruction to adopt, not merely an
+5. be contained in a later Git commit authenticated by a key whose public
+   identity was pinned in the candidate before the adoption instruction;
+6. be written only after an explicit human instruction to adopt, not merely an
    instruction to draft or amend;
-6. appear in a later commit so the adopted candidate commit cannot include a
+7. appear in a later commit so the adopted candidate commit cannot include a
    self-referential adoption record.
 
-No such atom exists yet. Independent re-gate of revision 2 comes first.
+The authenticated Git commit is the bootstrap witness. Merely writing
+`bos:actor:human:s0fractal` in an atom is not authentication. V3 MUST fail
+closed when the pinned key or signature is absent or does not bind the adoption
+bytes. Warrant or Bitcoin anchoring may strengthen later governance but is not
+an undefined alternative genesis vehicle in v0.3.
+
+No key is pinned and no such atom exists yet. Independent re-gate of revision 3
+comes first; genesis adoption is therefore mechanically impossible in the
+current repository state.
 
 ### 1.3 Post-genesis governance
 
@@ -172,11 +222,15 @@ The BOS process verbs map to schema objects:
 | `ACTS` | `action` bound to an authorized decision | may change target asset |
 | `RECORDS` | `evidence` and/or `outcome` | proves only its declared evidence scope |
 
-No verb is inferred from persuasive prose.
+The table is a many-to-many realization guide, not a claim that every process
+verb is encoded as a distinct schema field. In v0.3, `evidence_kind` and
+structural relations distinguish concrete evidence roles; OBSERVES versus
+RECORDS may remain descriptive. No **authority effect** or semantic edge is
+inferred from persuasive prose.
 
 ## 3. Scope
 
-BOS v0.2 defines:
+BOS v0.3 defines:
 
 - strict semantic atom kinds and payloads;
 - first-class actors and status axes;
@@ -188,7 +242,7 @@ BOS v0.2 defines:
 - deterministic graph validation;
 - bounded adjudication experiments.
 
-BOS v0.2 is not:
+BOS v0.3 is not:
 
 - a universal event store;
 - a replacement for Git, Warrant, Sigma, Trinity, registries, or law;
@@ -232,7 +286,10 @@ Markdown links are human navigation hints. Machine relations use atom IDs.
 Renaming a file may break a human link but MUST NOT create a new semantic ID.
 The resolver maps IDs to paths and checks links separately.
 
-Duplicate IDs are invalid in v0.2. No mirror exception exists.
+Duplicate IDs are invalid within one declared validator universe. Independent
+universes may mirror an atom only when its canonical bytes are identical. A
+combined universe treats byte-identical mirrors as one record and rejects
+different bytes under one ID. Repository location is not identity.
 
 ### 5.2 Proposed versus adopted revisions
 
@@ -245,7 +302,18 @@ field in this lexical form:
 revision: "sha256:<64 lowercase hexadecimal digits>"
 ```
 
-### 5.3 `bos-atom-file-v0.2` revision algorithm
+Before adoption, the candidate is frozen by this ritual:
+
+1. add the revision line with 64 zero digits;
+2. compute the algorithm below and replace only those digits;
+3. run the independent re-gate over that digest-bearing file;
+4. make no later byte change to the candidate;
+5. let the adoption name exactly that declared digest.
+
+The re-gated and adopted candidate bytes are therefore the same file. A review
+of a revision-less draft is design feedback, not an adoption gate.
+
+### 5.3 `bos-atom-file-v0.3` revision algorithm
 
 Revision bytes are the complete `.bos.md` file, including Markdown body, with
 one normalization:
@@ -256,7 +324,9 @@ one normalization:
 4. YAML frontmatter MUST start with `---` on byte 0 and end at the first later
    line exactly equal to `---`;
 5. duplicate YAML mapping keys MUST be rejected;
-6. locate the single top-level lexical `revision` line described above;
+6. within the frontmatter byte range from step 4, locate exactly one
+   unindented, uncommented lexical `revision` line described above; zero or
+   multiple matches are invalid, while body/code-fence look-alikes are ignored;
 7. replace only its 64 digest digits with 64 ASCII `0` bytes, preserving every
    other byte;
 8. compute SHA-256 over the resulting complete file bytes;
@@ -268,9 +338,13 @@ frontmatter or changing explanatory prose changes the revision.
 The revision field is a placeholder-bound raw-file commitment, avoiding
 self-reference without hiding body changes.
 
+The repository MUST carry `.gitattributes` with `*.bos.md text eol=lf`.
+Validators still reject CR/CRLF bytes; Git configuration is not trusted as a
+normalization oracle.
+
 ## 6. Context cuts
 
-BOS v0.2 accepts only clean Git repository cuts:
+BOS v0.3 accepts only clean Git repository cuts:
 
 ```yaml
 repositories:
@@ -279,7 +353,7 @@ repositories:
     dirty: false
 ```
 
-`dirty: true` is schema-invalid. BOS v0.2 deliberately has no custom
+`dirty: true` is schema-invalid. BOS v0.3 deliberately has no custom
 working-tree digest.
 
 Uncommitted work may be explored, but it MUST be committed or captured as
@@ -294,7 +368,7 @@ Wall-clock time alone is descriptive.
 
 ## 7. Type system
 
-The v0.2 kind registry is closed:
+The v0.3 kind registry is closed:
 
 | Kind | Role |
 |---|---|
@@ -331,21 +405,23 @@ authorize its own proposal.
 Status is not one scalar. The axes are governance, lifecycle, maturity,
 priority, health, and freshness. No axis implies another.
 
-The revision-2 genesis vocabulary includes:
+The revision-3 genesis vocabulary includes:
 
 - [`bos:status:governance:proposed`](../atoms/status/governance-proposed.bos.md);
 - [`bos:status:maturity:research`](../atoms/status/maturity-research.bos.md);
 - [`bos:status:priority:now`](../atoms/status/priority-now.bos.md);
 - [`bos:status:health:unknown`](../atoms/status/health-unknown.bos.md);
-- [`bos:status:freshness:current`](../atoms/status/freshness-current.bos.md).
+- [`bos:status:freshness:current`](../atoms/status/freshness-current.bos.md);
+- [`bos:status:lifecycle:recorded`](../atoms/status/lifecycle-recorded.bos.md).
 
 Status atoms themselves bootstrap the vocabulary and therefore do not carry a
-recursive `states` envelope. New values require a later schema/registry
-adoption.
+recursive `states` envelope. A new value on an existing axis requires registry
+adoption of the status atom, not a schema-version change. Adding an axis or
+changing state-envelope structure requires a new schema version.
 
 ### 7.2 Scope vocabulary
 
-The v0.2 scope labels are closed by schema:
+The v0.3 scope labels are closed by schema:
 
 ```text
 bos, ecosystem, autonomy, business, process, machine-experience,
@@ -397,6 +473,13 @@ Envelope `relations` may use only:
 Structural relations carry no confidence. They describe the topology of the
 record itself.
 
+`supersedes` records an author's intended lifecycle link; it does not by itself
+select the current record or erase the predecessor. If two records supersede
+the same predecessor, V1 reports a supersession conflict. A current-record
+projection needs an explicit decision/adoption or must preserve all competing
+successors. Contesting either successor remains possible through first-class
+relation claims; no structural edge has authority merely by existing.
+
 Vehicle membership has exactly one authority surface:
 `vehicle.payload.includes`. A vehicle MUST NOT duplicate membership through
 envelope `relations`. The list declares what the vehicle incorporates; it is
@@ -431,6 +514,13 @@ It independently carries:
 - optional expiry.
 
 Changing or refuting the edge does not mutate either endpoint.
+
+`conflicts_with` and `equivalent_to` are symmetric at query time: a view folds
+both orientations to the same unordered endpoint pair while preserving each
+claim's author, confidence, evidence, and context. Reverse claims are therefore
+corroborating or conflicting records, not required mirror edges.
+`equivalent_to` is non-transitive in v0.3 and never aliases IDs, rewrites
+references, or transfers authority.
 
 The validator enforces closed predicate vocabulary and reference integrity.
 Semantic appropriateness beyond the declared domain/range table is an
@@ -511,7 +601,9 @@ Public and internal payloads may be embedded subject to repository policy.
 Confidential or secret payloads MUST use:
 
 - `payload_mode: commitment`;
-- SHA-256 commitment;
+- `commitment_scheme: sha256-private-nonce-payload-v1`;
+- SHA-256 over a domain separator, at least 128 bits of random nonce kept at
+  the private locator, and the canonical confidential payload bytes;
 - controlled private locator;
 - encryption descriptor.
 
@@ -536,6 +628,12 @@ derives staleness when:
 Freshness is a projection. An embedded `freshness: current` status cannot
 override an expired payload.
 
+A decision created after a reason's `valid_until` MUST fail V3. V0.3 has no
+override vehicle: re-observe or replace the expired assertion under a new atom.
+This keeps an old assertion available as history without silently using it as
+current decision evidence. Watched-source triggers are informative until a
+first-class watcher/source registry is adopted.
+
 ## 14. Validation boundary
 
 ### V0 — mechanical syntax
@@ -555,6 +653,7 @@ override an expired payload.
 - vehicle membership has one representation;
 - context cuts are clean;
 - evidence digests match repository-local locators where applicable.
+- competing `supersedes` links are reported rather than silently resolved.
 
 ### V2 — mechanical temporal scope
 
@@ -573,8 +672,15 @@ reported as mechanically complete.
 - adoption names exact revision and authority;
 - action names an authorized decision;
 - adopted revisions are immutable.
+- genesis adoption is bound to a pre-pinned key or external receipt;
+- decision reasons are not expired at decision creation time.
 
 Before genesis adoption, V3 must report `genesis candidate`, never `adopted`.
+
+Every machine-readable validator report MUST bind the exact input universe by
+sorted repository-relative paths and SHA-256 digests. A portable verdict also
+binds the relevant context cut; an active-checkout diagnostic that cannot bind
+a clean cut MUST say so and MUST NOT be presented as a historical verdict.
 
 ### V4 — external contracts
 
@@ -611,7 +717,13 @@ Initial views:
 
 ## 16. Countervectors
 
-Mechanical countervectors are first-class atoms. Revision 2 already includes:
+Countervectors are first-class atoms. `verification_class: mechanical` declares
+the intended gate, not that prose in `verification` is already executable.
+Executable coverage lives in `tests/countervectors/` or a test that names the
+countervector ID. Phase 0 cannot exit until every mechanical countervector
+included by BOS-0001 has such a fixture.
+
+Revision 3 includes:
 
 - self-authorizing genesis;
 - ambiguous dirty cut;
@@ -667,7 +779,7 @@ Exit only when:
 - repository validator checks V0 and V1;
 - permanent negative tests exercise Kimi's mechanical countervectors;
 - all active atoms and links resolve;
-- rev 2 receives an independent design re-gate;
+- rev 3 receives an independent design re-gate;
 - the human explicitly chooses whether to perform genesis adoption.
 
 ### Phase 1 — ecosystem observations
@@ -680,7 +792,8 @@ Exit only when:
 
 ### Phase 2 — multi-model trajectory
 
-Exit only when BOS-E0001 contains at least three independent trajectories and a
+Exit only when [`bos:vehicle:bos-e0001`](../atoms/vehicle/bos-e0001-multimodel-decision-trace.bos.md)
+contains at least three independent trajectories and a
 fourth evaluator, using the rubric below.
 
 ### Phase 3 — Warrant authority bridge
@@ -719,6 +832,12 @@ Pass requires:
 - human adjudicator and one model evaluator independently agree on the category
   labels, with disagreements preserved.
 
+Any label disagreement makes the run `inconclusive`; it is neither pass nor
+fail until a separate adjudication record preserves both labels and its
+resolution. Trajectory independence is adjudicated from declared supplied sets
+and known coordination. BOS does not claim mechanical access to hidden model
+state.
+
 This is an adjudicated experiment, not a deterministic semantic oracle.
 
 ## 20. Commercial purpose
@@ -751,7 +870,7 @@ if either occurs:
 2. a validator is introduced only to validate another validator and protects no
    declared V0–V4 boundary.
 
-Before Phase 2, no new kind may be added after v0.2 unless a counterexample
+Before Phase 2, no new kind may be added after v0.3 unless a counterexample
 shows that every existing kind loses required semantics.
 
 This is a mechanical repository-history trigger plus human adjudication of the
