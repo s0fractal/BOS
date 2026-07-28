@@ -1,0 +1,19 @@
+---
+id: bos:status:priority:now
+schema: bos.atom@v0
+kind: status
+title: Priority — now
+created_at: "2026-07-28T00:00:00Z"
+created_by: human:s0fractal+model:codex
+scope: [bos]
+relations: []
+payload:
+  axis: priority
+  value: now
+  semantics: "The atom belongs to the current bounded attention window."
+  transitions_to: []
+---
+
+# Now
+
+`now` allocates attention. It does not imply adoption, maturity, or health.

@@ -1,0 +1,877 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://s0fractal.dev/bos/schemas/bos-atom-v0.schema.json",
+  "title": "BOS Atom v0",
+  "description": "Strict decoded-frontmatter contract for one BOS semantic atom.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "schema",
+    "kind",
+    "title",
+    "created_at",
+    "created_by",
+    "scope",
+    "relations",
+    "payload"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "schema": {
+      "const": "bos.atom@v0"
+    },
+    "kind": {
+      "enum": [
+        "asset",
+        "claim",
+        "hypothesis",
+        "risk",
+        "requirement",
+        "evidence",
+        "decision",
+        "action",
+        "outcome",
+        "context_cut",
+        "trajectory",
+        "principle",
+        "goal",
+        "vehicle",
+        "status"
+      ]
+    },
+    "states": {
+      "$ref": "#/$defs/states"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "relations": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/relation"
+      }
+    },
+    "payload": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "not": {
+              "const": "status"
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "states"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "principle"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/principle_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "goal"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/goal_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "claim",
+              "hypothesis"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/assertion_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "risk"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/risk_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "requirement"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/requirement_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "asset"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/asset_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "evidence"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/evidence_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "decision"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/decision_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "action"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/action_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "outcome"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/outcome_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "context_cut"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/context_cut_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "trajectory"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/trajectory_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "vehicle"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/vehicle_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "status"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/status_payload"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^bos:[a-z][a-z0-9_-]*(?::[a-z0-9][a-z0-9._-]*)+$"
+    },
+    "states": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "governance": {
+          "$ref": "#/$defs/id"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/id"
+        },
+        "maturity": {
+          "$ref": "#/$defs/id"
+        },
+        "priority": {
+          "$ref": "#/$defs/id"
+        },
+        "health": {
+          "$ref": "#/$defs/id"
+        },
+        "freshness": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predicate",
+        "object"
+      ],
+      "properties": {
+        "predicate": {
+          "enum": [
+            "includes",
+            "supports",
+            "refutes",
+            "mitigates",
+            "constrains",
+            "motivates",
+            "realizes",
+            "depends_on",
+            "supersedes",
+            "derived_from",
+            "observed_in",
+            "produces",
+            "validates",
+            "authorizes",
+            "changes",
+            "targets"
+          ]
+        },
+        "object": {
+          "$ref": "#/$defs/id"
+        },
+        "context": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "principle_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "implications"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "implications": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "goal_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "success_signals"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "success_signals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "assertion_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "confidence",
+        "falsifier"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "speculative",
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "falsifier": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "risk_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "likelihood",
+        "impact",
+        "mitigation"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "likelihood": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "impact": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "mitigation": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "requirement_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "level",
+        "verification"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "level": {
+          "enum": [
+            "MUST",
+            "SHOULD",
+            "MAY"
+          ]
+        },
+        "verification": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "asset_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_kind",
+        "locator"
+      ],
+      "properties": {
+        "asset_kind": {
+          "enum": [
+            "repository",
+            "specification",
+            "capability",
+            "implementation",
+            "release",
+            "dataset",
+            "service",
+            "research"
+          ]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evidence_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_kind",
+        "locator",
+        "observed_at"
+      ],
+      "properties": {
+        "evidence_kind": {
+          "enum": [
+            "commit",
+            "test_report",
+            "review",
+            "research",
+            "countervector",
+            "external_source",
+            "receipt"
+          ]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "decision_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question",
+        "choice",
+        "reasons",
+        "authority"
+      ],
+      "properties": {
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "choice": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "authority": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "action_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verb",
+        "target",
+        "authority",
+        "acceptance"
+      ],
+      "properties": {
+        "verb": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "$ref": "#/$defs/id"
+        },
+        "authority": {
+          "$ref": "#/$defs/id"
+        },
+        "acceptance": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "outcome_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "evidence"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "context_cut_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repositories",
+        "sources",
+        "anchors"
+      ],
+      "properties": {
+        "repositories": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "asset",
+              "commit",
+              "dirty"
+            ],
+            "properties": {
+              "asset": {
+                "$ref": "#/$defs/id"
+              },
+              "commit": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              "dirty": {
+                "type": "boolean"
+              },
+              "working_tree_digest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "dirty": {
+                      "const": true
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "working_tree_digest"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "sources": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "anchors": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "value"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "git",
+                  "bitcoin",
+                  "wall_clock",
+                  "warrant"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "trajectory_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor",
+        "objective",
+        "context_cut",
+        "read_set",
+        "produced"
+      ],
+      "properties": {
+        "actor": {
+          "type": "string",
+          "minLength": 1
+        },
+        "objective": {
+          "type": "string",
+          "minLength": 1
+        },
+        "context_cut": {
+          "$ref": "#/$defs/id"
+        },
+        "read_set": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "produced": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "selected_action": {
+          "$ref": "#/$defs/id"
+        },
+        "receipt": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "vehicle_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vehicle_kind",
+        "includes"
+      ],
+      "properties": {
+        "vehicle_kind": {
+          "enum": [
+            "WRT",
+            "ADR",
+            "SPEC",
+            "ROADMAP",
+            "RESEARCH",
+            "RFC"
+          ]
+        },
+        "includes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "status_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "axis",
+        "value",
+        "semantics",
+        "transitions_to"
+      ],
+      "properties": {
+        "axis": {
+          "enum": [
+            "governance",
+            "lifecycle",
+            "maturity",
+            "priority",
+            "health",
+            "freshness"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transitions_to": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    }
+  }
+}

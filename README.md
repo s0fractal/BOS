@@ -1,10 +1,37 @@
-# Buisness Operating System
+# BOS — Business Operating System
 
-## What is it ?
-Contain Docs minds and reworked info from model to coordinate all s0fractal repos
+BOS is an experimental, typed decision graph for coordinating the s0fractal
+ecosystem across repositories and model voices.
 
-## Architecture
-- `raw`: 
+It is not another task tracker and not a replacement source of truth for the
+repositories it observes. BOS records:
 
-## Meta
-- gant diagram of all s0fractal repos
+- assets and capabilities;
+- claims, hypotheses, requirements, and risks;
+- evidence and historical context cuts;
+- decisions, actions, and outcomes;
+- the different trajectories taken by human and model actors.
+
+The long-term purpose is to let a model see not only the current state of the
+ecosystem, but also how another actor understood a historical context, why it
+proposed a path, what authority allowed an action, and what happened next.
+
+## Start here
+
+- [`spec/BOS-0001-core.bos.md`](spec/BOS-0001-core.bos.md) — draft core
+  specification.
+- [`schemas/bos-atom-v0.schema.json`](schemas/bos-atom-v0.schema.json) — strict
+  machine envelope and payload types.
+- [`atoms/`](atoms/) — first-class normative atoms consumed by BOS-0001.
+- [`experiments/BOS-E0001-multimodel-decision-trace.md`](experiments/BOS-E0001-multimodel-decision-trace.md)
+  — first dogfood experiment.
+- [`raw/`](raw/) — research and captures. Raw material is evidence, not
+  authority.
+- [`archive/gemini-nodes-prototype/`](archive/gemini-nodes-prototype/) — the
+  initial Gemini prototype; preserved as design archaeology, not active
+  BOS-0001 data.
+
+## Kernel sentence
+
+> A model may propose meaning freely; changing shared reality requires explicit
+> authority and leaves a verifiable receipt.
