@@ -1,689 +1,758 @@
 ---
 id: bos:vehicle:bos-0001
-schema: bos.atom@v0
+schema: bos.atom@v0.2
 kind: vehicle
 states:
   governance: bos:status:governance:proposed
   maturity: bos:status:maturity:research
   priority: bos:status:priority:now
-title: "BOS-0001: Typed Decision Graph Core"
+title: "BOS-0001 rev 2: Typed Decision Graph Core"
 created_at: "2026-07-28T00:00:00Z"
-created_by: human:s0fractal+model:codex
+created_by:
+  - bos:actor:human:s0fractal
+  - bos:actor:model:codex
 scope: [bos, ecosystem]
+disclosure:
+  classification: public
+  payload_mode: embedded
+  retention: indefinite
 relations:
-  - predicate: includes
-    object: bos:principle:projection-not-ssot
-  - predicate: includes
-    object: bos:principle:freedom-authority-separation
-  - predicate: includes
-    object: bos:claim:experience-is-trajectory
-  - predicate: includes
-    object: bos:goal:sustainable-model-autonomy
-  - predicate: includes
-    object: bos:requirement:typed-atoms
-  - predicate: includes
-    object: bos:requirement:context-cut
-  - predicate: includes
-    object: bos:requirement:model-trajectory
-  - predicate: includes
-    object: bos:requirement:provenance-before-authority
-  - predicate: includes
-    object: bos:risk:meta-recursion
-  - predicate: includes
-    object: bos:risk:false-replay
-  - predicate: includes
-    object: bos:risk:ontology-explosion
-  - predicate: includes
-    object: bos:decision:v0-bounded-scope
+  - predicate: derived_from
+    object: bos:trajectory:kimi-bos-0001-rev1-review
 payload:
   vehicle_kind: SPEC
+  vehicle_revision: 2
   includes:
+    - bos:status:governance:proposed
+    - bos:status:maturity:research
+    - bos:status:priority:now
+    - bos:status:health:unknown
+    - bos:status:freshness:current
+    - bos:actor:human:s0fractal
+    - bos:actor:model:codex
+    - bos:actor:model:kimi-k3
+    - bos:asset:repo:bos
     - bos:principle:projection-not-ssot
     - bos:principle:freedom-authority-separation
     - bos:claim:experience-is-trajectory
     - bos:goal:sustainable-model-autonomy
+    - bos:hypothesis:agent-decision-evidence-commercial-wedge
     - bos:requirement:typed-atoms
     - bos:requirement:context-cut
     - bos:requirement:model-trajectory
     - bos:requirement:provenance-before-authority
+    - bos:requirement:genesis-adoption
+    - bos:requirement:canonical-atom-bytes
+    - bos:requirement:first-class-contestable-relations
+    - bos:requirement:verification-boundaries
+    - bos:requirement:privacy-boundary
     - bos:risk:meta-recursion
     - bos:risk:false-replay
     - bos:risk:ontology-explosion
-    - bos:decision:v0-bounded-scope
+    - bos:risk:bootstrap-authority-cycle
+    - bos:risk:undefined-canonical-bytes
+    - bos:risk:embedded-contestable-relations
+    - bos:risk:unenforceable-norms
+    - bos:risk:immutable-sensitive-payload
+    - bos:risk:supplied-read-confusion
+    - bos:proposal:v0-bounded-scope
+    - bos:evidence:review:kimi-bos-0001-rev1
+    - bos:evidence:research:warrant-sigma-commercial-2026-07-28
+    - bos:context_cut:bos-0001-rev1
+    - bos:trajectory:kimi-bos-0001-rev1-review
+    - bos:relation_claim:kimi-review-supports-bootstrap-risk
+    - bos:relation_claim:experience-motivates-trajectory
+    - bos:countervector:self-authorizing-genesis
+    - bos:countervector:ambiguous-dirty-cut
+    - bos:countervector:embedded-semantic-edge
+    - bos:countervector:immutable-secret
 ---
 
-# BOS-0001 — Typed Decision Graph Core
+# BOS-0001 rev 2 — Typed Decision Graph Core
 
-Status: **PROPOSED / RESEARCH**
-Audience: humans and model actors coordinating the s0fractal ecosystem
-Normative schema: [`bos-atom-v0.schema.json`](../schemas/bos-atom-v0.schema.json)
+Status: **GENESIS CANDIDATE / NOT ADOPTED**
 
-## Abstract
+Normative decoded-frontmatter schema:
+[`bos.atom@v0.2`](../schemas/bos-atom-v0.2.schema.json).
+
+Revision 1 is preserved by Git commit
+`932077016f4544a6c455992ec93762dbc11c1b36`. Revision 2 incorporates the
+adversarial Kimi trajectory
+[`bos:trajectory:kimi-bos-0001-rev1-review`](../atoms/trajectory/kimi-bos-0001-rev1-review.bos.md).
+
+## 0. Abstract
 
 BOS is a typed, provenance-rich graph for coordinating repositories, research,
 model trajectories, decisions, actions, and outcomes.
 
-Its commercial starting objective is to help turn the research in
-`raw/Комерційне застосування Warrant × Σ-GLYPH — дип-ресерч/` and its independent
-model variations into externally useful Warrant × Sigma products. Its deeper
-objective is to let multiple model actors reason freely over a shared ecosystem
-without letting persuasive output silently become authority.
+It preserves how different human and model actors understood a bounded
+historical world. It permits rapid, plural proposal while keeping adoption and
+material action behind explicit authority.
 
-BOS does not attempt to make one model the canonical planner. It preserves
-independent trajectories, makes their inputs historically explicit, and binds
-material actions to explicit decision authority.
-
-The core sentence is:
+The kernel sentence is:
 
 > A model may propose meaning freely; changing shared reality requires explicit
 > authority and leaves a verifiable receipt.
 
-## 1. Normative language modified for BOS
+BOS begins with a commercial hypothesis: independently verifiable evidence for
+AI-agent decisions may be the strongest initial Warrant × Sigma product wedge.
+That statement is the typed, expiring, falsifiable atom
+[`bos:hypothesis:agent-decision-evidence-commercial-wedge`](../atoms/hypothesis/agent-decision-evidence-commercial-wedge.bos.md),
+not permanent truth embedded in this specification.
 
-`MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, and `MAY` have their conventional
-RFC meaning.
+## 1. Genesis and authority
 
-BOS additionally distinguishes verbs that ordinary RFCs often collapse:
+### 1.1 No self-creation
 
-- **OBSERVES** — records a source in a bounded context without endorsing it.
-- **CLAIMS** — makes a falsifiable or confidence-bounded assertion.
-- **PROPOSES** — offers a possible graph change with no authority effect.
-- **RECOMMENDS** — ranks a proposal for an identified actor or objective.
-- **DECIDES** — selects a path under named authority.
-- **ACTS** — changes an external or shared asset.
-- **ADOPTS** — promotes an atom into the governed shared contract.
-- **RECEIPTS** — records evidence that an action or transition occurred.
+BOS-0001 revision 2 is a **genesis candidate**. Its `MUST` statements describe
+the contract that would apply after adoption; they do not manufacture the
+authority that adopts them.
 
-An actor that may `PROPOSE` does not thereby have permission to `DECIDE`, `ACT`,
-or `ADOPT`.
+At the current revision:
 
-## 2. Normative atoms consumed by this specification
+- no BOS atom is adopted merely because it exists in this repository;
+- governance state `proposed` is self-description, not authority;
+- [`bos:proposal:v0-bounded-scope`](../atoms/proposal/v0-bounded-scope.bos.md)
+  is a proposal, not a decision;
+- V3 authority validation MUST NOT project this candidate as adopted.
 
-BOS-0001 is a vehicle. Its load-bearing semantics live in separately
-addressable atoms:
+### 1.2 Bootstrap act
 
-### Principles and goal
+The first adoption is deliberately external to BOS.
 
-- [`bos:principle:projection-not-ssot`](../atoms/principle/projection-not-ssot.bos.md)
-- [`bos:principle:freedom-authority-separation`](../atoms/principle/freedom-authority-separation.bos.md)
-- [`bos:goal:sustainable-model-autonomy`](../atoms/goal/sustainable-model-autonomy.bos.md)
+A valid genesis adoption MUST:
 
-### Claim
+1. be an `adoption` atom with mode `genesis-human`;
+2. name `bos:actor:human:s0fractal` as the bootstrap authority;
+3. identify the exact candidate vehicle revision;
+4. bind a clean Git context cut containing that revision and all included
+   atoms;
+5. be written only after an explicit human instruction to adopt, not merely an
+   instruction to draft or amend;
+6. appear in a later commit so the adopted candidate commit cannot include a
+   self-referential adoption record.
 
-- [`bos:claim:experience-is-trajectory`](../atoms/claim/experience-is-trajectory.bos.md)
+No such atom exists yet. Independent re-gate of revision 2 comes first.
 
-### Requirements
+### 1.3 Post-genesis governance
 
-- [`bos:requirement:typed-atoms`](../atoms/requirement/typed-atoms.bos.md)
-- [`bos:requirement:context-cut`](../atoms/requirement/context-cut.bos.md)
-- [`bos:requirement:model-trajectory`](../atoms/requirement/model-trajectory.bos.md)
-- [`bos:requirement:provenance-before-authority`](../atoms/requirement/provenance-before-authority.bos.md)
+Genesis authority is not intended to remain the permanent constitutional
+mechanism. A later adopted contract MAY replace it with Warrant-governed
+authority.
 
-### Known risks
+The migration MUST preserve:
 
-- [`bos:risk:meta-recursion`](../atoms/risk/meta-recursion.bos.md)
-- [`bos:risk:false-replay`](../atoms/risk/false-replay.bos.md)
-- [`bos:risk:ontology-explosion`](../atoms/risk/ontology-explosion.bos.md)
+- the external fact of genesis;
+- exact historical bytes;
+- the succession authority;
+- losing or rejected governance paths.
 
-### Scope decision
+## 2. Normative vocabulary
 
-- [`bos:decision:v0-bounded-scope`](../atoms/decision/v0-bounded-scope.bos.md)
+`MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, and `MAY` have conventional RFC
+meaning, but every requirement also declares one verification class:
 
-If prose in this document conflicts with one of those atoms, the conflict MUST
-be made explicit. A model MUST NOT silently select whichever wording better
-supports its intended action.
+- **mechanical** — deterministic validator or verifier;
+- **adjudicated** — a named authority interprets evidence;
+- **research** — the rule is not yet suitable as a gate.
+
+A research or adjudicated requirement MUST NOT be presented as a deterministic
+validator verdict.
+
+The BOS process verbs map to schema objects:
+
+| Verb | Schema realization | Authority effect |
+|---|---|---|
+| `OBSERVES` | `evidence`, `context_cut`, or `trajectory` plus structural `observes` | none |
+| `CLAIMS` | `claim`, `hypothesis`, or `relation_claim` | none |
+| `PROPOSES` | `proposal` | none |
+| `RECOMMENDS` | `relation_claim` from reasons to a proposal | none |
+| `DECIDES` | `decision` with authority and context cut | selects within named authority |
+| `ADOPTS` | `adoption` over exact revision and authority | governance transition |
+| `ACTS` | `action` bound to an authorized decision | may change target asset |
+| `RECORDS` | `evidence` and/or `outcome` | proves only its declared evidence scope |
+
+No verb is inferred from persuasive prose.
 
 ## 3. Scope
 
-### 3.1 BOS v0 does
+BOS v0.2 defines:
 
-BOS v0:
+- strict semantic atom kinds and payloads;
+- first-class actors and status axes;
+- first-class contestable relation claims;
+- immutable clean Git context cuts;
+- per-actor supplied-context trajectories;
+- genesis and later adoption boundaries;
+- public-descriptor/private-payload rules;
+- deterministic graph validation;
+- bounded adjudication experiments.
 
-1. defines strict semantic atom kinds;
-2. separates semantic kinds, document vehicles, and status axes;
-3. records upstream assets without replacing their authority;
-4. binds model work to immutable historical context cuts;
-5. preserves different model trajectories without forced consensus;
-6. connects reasons, authority, actions, and outcomes;
-7. produces reconstructable read-only views;
-8. supports countervector-driven validation of the graph itself.
-
-### 3.2 BOS v0 does not
-
-BOS v0 is not:
+BOS v0.2 is not:
 
 - a universal event store;
-- a replacement for Git, GitHub, registries, Warrant, or Trinity;
+- a replacement for Git, Warrant, Sigma, Trinity, registries, or law;
+- an LLM attention monitor;
+- deterministic replay of nondeterministic cognition;
+- a global-consensus or complete-world oracle;
 - a task-management UI;
-- an autonomous bank account or spending daemon;
-- a deterministic replay engine for LLM cognition;
-- a claim that a typed graph makes its contents true;
-- a runtime for executable Python embedded in Markdown;
-- a global-consensus protocol.
+- a spending daemon;
+- a runtime for code embedded in Markdown.
 
-These exclusions are deliberate protection against
-[`bos:risk:meta-recursion`](../atoms/risk/meta-recursion.bos.md).
-
-## 4. Core algebra
-
-A BOS space is:
+## 4. Graph algebra
 
 ```text
-BOS = (A, R, C, T, V)
+BOS = (A, S, Q, C, T, V)
 ```
 
 where:
 
-- `A` is a set of typed atoms;
-- `R` is a set of typed directed relations between atoms;
+- `A` is the set of typed atoms;
+- `S` is the set of embedded structural relations;
+- `Q ⊆ A` is the set of contestable `relation_claim` atoms;
 - `C ⊆ A` is the set of immutable context cuts;
 - `T ⊆ A` is the set of actor trajectories;
-- `V` is a set of deterministic, disposable views over `A` and `R`.
+- `V` is a set of disposable projections over a declared input universe.
 
-Views are not atoms merely because they are rendered. A view becomes evidence
-only when its exact bytes, derivation, and observation context are themselves
-captured.
+An active graph validator operates on an explicitly declared file/source
+universe. It does not claim to know every trajectory or atom that exists
+elsewhere.
 
-Current state is a projection. Historical meaning is reconstructed from atoms,
-relations, context cuts, decisions, and receipts.
+## 5. Atom identity and canonical bytes
 
-## 5. Atom envelope
+### 5.1 Identity layers
 
-Every normative atom MUST decode from its Markdown frontmatter into
-[`bos.atom@v0`](../schemas/bos-atom-v0.schema.json).
+- `id` is stable semantic identity.
+- `schema` is the decoder contract.
+- path and filename are navigation aliases.
+- `revision` is exact content identity.
+- Git commit identifies a repository cut containing atom revisions.
 
-The envelope has:
+Markdown links are human navigation hints. Machine relations use atom IDs.
+Renaming a file may break a human link but MUST NOT create a new semantic ID.
+The resolver maps IDs to paths and checks links separately.
+
+Duplicate IDs are invalid in v0.2. No mirror exception exists.
+
+### 5.2 Proposed versus adopted revisions
+
+A proposed atom MAY omit `revision`.
+
+An atom referenced by an adoption MUST contain exactly one top-level revision
+field in this lexical form:
 
 ```yaml
-id: bos:<kind>:<stable-name>
-schema: bos.atom@v0
-kind: claim
-states:
-  governance: bos:status:governance:proposed
-  maturity: bos:status:maturity:research
-title: Human-readable title
-created_at: "2026-07-28T00:00:00Z"
-created_by: model:example
-scope: [bos]
-revision: "sha256:<optional canonical revision hash>"
-relations: []
-payload: {}
+revision: "sha256:<64 lowercase hexadecimal digits>"
 ```
 
-### 5.1 Identity
+### 5.3 `bos-atom-file-v0.2` revision algorithm
 
-- `id` is semantic identity.
-- Filename and path are mutable navigation aliases.
-- `schema` is the decoder contract, not the atom identity.
-- `revision`, when present, binds a canonical envelope and payload revision.
+Revision bytes are the complete `.bos.md` file, including Markdown body, with
+one normalization:
 
-Two files with the same `id` are a conflict unless one is a byte-identical
-mirror under an explicitly governed mirror rule.
+1. input MUST be valid UTF-8 with no BOM;
+2. line endings MUST be LF;
+3. the file MUST end in exactly one LF;
+4. YAML frontmatter MUST start with `---` on byte 0 and end at the first later
+   line exactly equal to `---`;
+5. duplicate YAML mapping keys MUST be rejected;
+6. locate the single top-level lexical `revision` line described above;
+7. replace only its 64 digest digits with 64 ASCII `0` bytes, preserving every
+   other byte;
+8. compute SHA-256 over the resulting complete file bytes;
+9. require the declared digest to equal the computed lowercase hex digest.
 
-Changing `@v0` to `@v1` changes the schema. It does not automatically create a
-new real-world asset or supersede the old claim.
+Decoded YAML canonicalization is not used for atom identity. Reordering
+frontmatter or changing explanatory prose changes the revision.
 
-### 5.2 Mutation
+The revision field is a placeholder-bound raw-file commitment, avoiding
+self-reference without hiding body changes.
 
-Before adoption, a proposed atom MAY be revised in Git.
+## 6. Context cuts
 
-Once an atom becomes governed/adopted:
+BOS v0.2 accepts only clean Git repository cuts:
 
-- its accepted revision MUST be content-addressed;
-- historical bytes MUST remain resolvable;
-- a semantic replacement MUST be a new revision or successor atom;
-- the replacement MUST name what it supersedes and why;
-- derived views MUST retain the losing or superseded history.
+```yaml
+repositories:
+  - asset: bos:asset:repo:bos
+    commit: <40 lowercase hex>
+    dirty: false
+```
 
-BOS-0001 does not yet define the adoption byte contract. Until that contract is
-integrated with Warrant, all new atoms in this draft remain proposed.
+`dirty: true` is schema-invalid. BOS v0.2 deliberately has no custom
+working-tree digest.
 
-### 5.3 Atomicity
+Uncommitted work may be explored, but it MUST be committed or captured as
+content-addressed evidence before it can support an adopted decision or
+material action.
 
-An atom SHOULD carry one independently contestable meaning.
+A context cut commits what was available to an actor. It does not claim that
+the actor internally attended to every supplied item.
 
-Good atoms:
+Git, WarrantIDs, and Bitcoin block hashes may provide historical coordinates.
+Wall-clock time alone is descriptive.
 
-- one risk;
-- one requirement;
-- one claim;
-- one decision;
-- one evidence item;
-- one action;
-- one outcome.
+## 7. Type system
 
-WRT, ADR, SPEC, ROADMAP, and RESEARCH are **vehicles** that include atoms. A
-vehicle MAY contain explanatory prose, but a normative statement that affects
-implementation or authority SHOULD be promoted into an addressable atom.
+The v0.2 kind registry is closed:
 
-## 6. Type system
-
-### 6.1 Semantic kinds
-
-The v0 kind registry is closed:
-
-| Kind | Meaning |
+| Kind | Role |
 |---|---|
-| `asset` | Repository, capability, specification, implementation, release, service, dataset, or research asset |
-| `claim` | Falsifiable assertion with confidence |
+| `actor` | Human, model, or service identity descriptor |
+| `asset` | Repository, contract, capability, implementation, release, research, or service |
+| `claim` | Falsifiable confidence-bounded assertion |
 | `hypothesis` | Claim explicitly awaiting experiment |
-| `risk` | Possible harmful condition with likelihood, impact, and mitigation |
-| `requirement` | Normative constraint with verification |
-| `evidence` | Located, observed support, refutation, report, receipt, or source |
-| `decision` | Selection under named authority and reasons |
-| `action` | Intended or executed mutation of an asset |
+| `risk` | Harmful possibility with likelihood, impact, and mitigation |
+| `requirement` | Norm with verification class and procedure |
+| `evidence` | Located review, research, commit, test, source, or receipt |
+| `proposal` | Unselected possible direction |
+| `decision` | Selected direction under authority and context |
+| `adoption` | Governance promotion of exact bytes |
+| `action` | Intended or executed mutation |
 | `outcome` | Observed consequence bound to evidence |
-| `context_cut` | Immutable set of source states visible to an actor |
-| `trajectory` | One actor's path from a context cut to produced atoms/actions |
+| `context_cut` | Immutable bounded input world |
+| `trajectory` | One actor's supplied context and output path |
+| `relation_claim` | Contestable semantic edge |
+| `countervector` | Targeted construction expected to break a claim or contract |
 | `principle` | Durable design constraint |
-| `goal` | Desired future condition with success signals |
+| `goal` | Desired condition with success signals |
 | `vehicle` | WRT, ADR, SPEC, ROADMAP, RESEARCH, or RFC manifest |
-| `status` | First-class state descriptor on one orthogonal axis |
+| `status` | State descriptor on one orthogonal axis |
 
-A new kind requires:
+WRT/ADR/SPEC are vehicles. Risk/requirement/claim are semantic kinds. `FR-017`
+may be a human alias, but its machine identity is a `bos:requirement:*` ID.
 
-1. a query that existing kinds cannot answer without semantic loss;
-2. a closed payload schema;
-3. at least one positive example;
-4. at least two confusing-neighbor counterexamples;
-5. a decision atom authorizing registry expansion.
+A future kind-registry change is a new schema version and requires adoption
+under the authority active at that time. The genesis registry does not need to
+authorize its own proposal.
 
-### 6.2 Vehicles are not semantic assertions
+### 7.1 Status axes
 
-`WRT`, `ADR`, and `SPEC` answer “what kind of governed document assembles these
-atoms?” `risk`, `requirement`, and `claim` answer “what semantic role does this
-atom play?”
+Status is not one scalar. The axes are governance, lifecycle, maturity,
+priority, health, and freshness. No axis implies another.
 
-Therefore:
+The revision-2 genesis vocabulary includes:
+
+- [`bos:status:governance:proposed`](../atoms/status/governance-proposed.bos.md);
+- [`bos:status:maturity:research`](../atoms/status/maturity-research.bos.md);
+- [`bos:status:priority:now`](../atoms/status/priority-now.bos.md);
+- [`bos:status:health:unknown`](../atoms/status/health-unknown.bos.md);
+- [`bos:status:freshness:current`](../atoms/status/freshness-current.bos.md).
+
+Status atoms themselves bootstrap the vocabulary and therefore do not carry a
+recursive `states` envelope. New values require a later schema/registry
+adoption.
+
+### 7.2 Scope vocabulary
+
+The v0.2 scope labels are closed by schema:
 
 ```text
-WRT-002 includes RISK-008 and FR-017
+bos, ecosystem, autonomy, business, process, machine-experience,
+privacy, warrant, sigma-glyph, trinity
 ```
 
-is meaningful, while:
+They are routing labels, not authority domains. A future need for governed or
+hierarchical scope identity requires first-class scope atoms and a new schema
+version.
+
+## 8. Actors and provenance
+
+Actor references have one grammar:
 
 ```text
-WRT-002 is a subtype of RISK
+bos:actor:(human|model|service):<handle>
 ```
 
-is not.
+`created_by` is a non-empty array of actor references. A plus-concatenated
+identity string is invalid.
 
-### 6.3 Status axes
+An actor descriptor states the strength of its identity basis. A chat handle is
+not a cryptographic principal. Model provider, hidden system context, exact
+weights, and runtime MUST NOT be implied when not independently bound.
 
-Statuses are first-class atoms, but state axes remain distinct:
+Genesis actor descriptors are candidates created under the explicit direction
+of the repository owner. This fact is recorded rather than hidden.
 
-- governance;
-- lifecycle;
-- maturity;
-- priority;
-- health;
-- freshness.
+## 9. Structural relations and relation claims
 
-`active` MUST NOT simultaneously mean adopted, implemented, high-priority, and
-healthy.
+### 9.1 Embedded structural registry
 
-An atom may be:
+Envelope `relations` may use only:
 
-```yaml
-states:
-  governance: bos:status:governance:proposed
-  maturity: bos:status:maturity:research
-  priority: bos:status:priority:now
-  health: bos:status:health:unknown
-  freshness: bos:status:freshness:current
-```
+| Predicate | Intended topology |
+|---|---|
+| `contains` | asset → contained asset |
+| `depends_on` | asset/proposal/action → prerequisite |
+| `supersedes` | successor → historical predecessor |
+| `derived_from` | atom → source/evidence/trajectory |
+| `targets` | proposal/action/countervector → target |
+| `produces` | trajectory/action → produced atom |
+| `observes` | evidence/context/trajectory → observed object |
+| `changes` | action/outcome → asset |
+| `implements` | asset/action → requirement/proposal |
+| `governed_by` | asset/decision/action → contract or authority |
+| `binds` | adoption/decision/evidence → context or revision |
 
-No axis implies the value of another.
+Structural relations carry no confidence. They describe the topology of the
+record itself.
 
-## 7. Relations
+Vehicle membership has exactly one authority surface:
+`vehicle.payload.includes`. A vehicle MUST NOT duplicate membership through
+envelope `relations`. The list declares what the vehicle incorporates; it is
+not a claim that every active atom in the repository belongs to the vehicle or
+that the repository is a globally complete universe.
 
-Relations are typed, directed, and attributable through the containing atom.
+### 9.2 First-class semantic predicate registry
 
-Important distinctions:
+A `relation_claim` uses one of:
 
-- `depends_on` is a structural claim;
-- `supports` and `refutes` connect evidence or claims;
-- `motivates` does not mean “proves”;
-- `authorizes` is invalid without a recognized authority path;
-- `changes` connects action to asset;
-- `supersedes` preserves rather than deletes history.
+- `supports`;
+- `refutes`;
+- `mitigates`;
+- `motivates`;
+- `enables`;
+- `conflicts_with`;
+- `addresses`;
+- `predicts`;
+- `constrains`;
+- `equivalent_to`.
 
-“Feature X solves market force Y” MUST NOT be stored as an unqualified
-structural edge. It is a strategic claim with author, evidence, confidence,
-time, and falsifier.
+It independently carries:
 
-The v0 validator MUST eventually enforce predicate domain/range rules in
-addition to the JSON Schema vocabulary.
+- subject;
+- predicate;
+- object;
+- author through `created_by`;
+- context cut;
+- confidence;
+- falsifier;
+- optional evidence;
+- optional expiry.
 
-## 8. Context cuts
+Changing or refuting the edge does not mutate either endpoint.
 
-A `context_cut` defines the world available to one trajectory.
+The validator enforces closed predicate vocabulary and reference integrity.
+Semantic appropriateness beyond the declared domain/range table is an
+adjudicated review obligation, not an invented oracle.
 
-It may bind:
-
-- full Git commit hashes;
-- dirty working-tree digests;
-- content-addressed research/evidence atoms;
-- WarrantIDs;
-- Bitcoin height plus block hash;
-- wall-clock timestamps as descriptive coordinates.
-
-Example:
-
-```yaml
-kind: context_cut
-payload:
-  repositories:
-    - asset: bos:asset:repo:warrant
-      commit: 0123456789abcdef0123456789abcdef01234567
-      dirty: false
-  sources:
-    - bos:evidence:research:commercial-warrant-sigma
-  anchors:
-    - kind: bitcoin
-      value: "height=<n>;block=<hash>"
-```
-
-A context cut MUST NOT claim completeness beyond the sources it commits.
-
-A dirty repository with no working-tree digest is not a reproducible cut and
-MUST be rejected for any trajectory that may authorize material action.
-
-## 9. Trajectories and machine experience
+## 10. Trajectories and machine experience
 
 A trajectory binds:
 
 ```text
 actor
   + objective
-  + context cut
-  + read set
+  + context_cut
+  + supplied_set
   → produced atoms
-  → optional selected action
-  → optional receipt
+  + exact output evidence
+  → optional selected action and receipt
 ```
 
-Claude, Codex, Gemini, Kimi, and human trajectories MUST remain distinct even
-when they converge.
+`supplied_set` means the inputs exposed by the orchestrator. It does not claim
+to reveal internal attention, hidden provider prompts, tokenizer behavior, or
+model cognition.
 
-A synthesis:
+Independent actor trajectories MUST remain distinct. A synthesis is a new atom
+that names its sources; it does not overwrite them.
 
-- is a new atom;
-- names the trajectories it derives from;
-- does not rewrite those trajectories;
-- states what was discarded or compressed.
+### 10.1 Recontextualization
 
-### 9.1 Recontextualization, not invented determinism
+BOS can preserve:
 
-For an ordinary LLM, BOS can prove:
+- the declared actor;
+- the bounded supplied context;
+- the captured output;
+- later decisions that consumed it.
 
-- which preserved context was supplied;
-- which output was captured;
-- which actor identity or service was claimed;
-- which later decision used the output.
+The word `replay` is reserved for computations whose relevant model/runtime,
+parameters, randomness, and inputs are sufficiently bound for reproduction.
+Otherwise the operation is **recontextualization**.
 
-It generally cannot prove that a future invocation will emit the same output.
+Sigma may replay deterministic subclaims. It does not make the surrounding LLM
+trajectory deterministic.
 
-The word **replay** MUST be reserved for a computation whose model, weights,
-runtime, parameters, randomness, and inputs are sufficiently bound to reproduce
-the result. Otherwise BOS MUST use **recontextualize**.
+## 11. Freedom and authority
 
-Sigma may provide deterministic replay for bounded subclaims. It does not make
-the surrounding LLM trajectory deterministic.
+Models may freely create:
 
-## 10. Freedom, authority, and action
+- claims and hypotheses;
+- relation claims;
+- risks and countervectors;
+- requirements and proposals;
+- critiques and syntheses.
 
-### 10.1 Proposal freedom
+Model output alone cannot:
 
-Within resource and privacy bounds, model actors MAY:
-
-- create claims and hypotheses;
-- identify risks;
-- propose requirements and actions;
-- construct countervectors;
-- rank alternatives;
-- criticize existing decisions;
-- synthesize new strategy vehicles.
-
-### 10.2 Authority boundary
-
-Model actors MUST NOT, solely by producing output:
-
-- mark their atom adopted;
-- grant themselves capabilities;
-- spend money;
+- adopt itself;
+- grant capability;
 - merge governed branches;
-- publish releases;
-- delete competing trajectories;
-- represent confidence as authority.
+- publish a release;
+- spend money;
+- delete a competing trajectory;
+- convert confidence into authority.
 
-### 10.3 Material actions
+A decision requires reasons, authority, and context cut. A material action
+requires a decision, target, acceptance conditions, and outcome evidence.
 
-A material action MUST identify:
+Warrant is the intended later authority carrier. BOS consumes pinned Warrant
+verification surfaces; it does not reimplement settlement.
 
-1. the target asset;
-2. the decision that authorizes it;
-3. the actor/capability performing it;
-4. acceptance conditions;
-5. outcome evidence or a bounded failure receipt.
+## 12. Privacy and retention
 
-Warrant is the intended authority and receipt carrier. BOS MUST consume Warrant
-results rather than reimplement Warrant settlement semantics.
+Every atom declares:
 
-## 11. Ecosystem integration
+- classification;
+- payload mode;
+- retention intent.
 
-### 11.1 Trinity
+Public and internal payloads may be embedded subject to repository policy.
+Confidential or secret payloads MUST use:
 
-Trinity is the broader cognitive/process substrate: perception, proposal,
-experiment, receipt, formula, crystal, compost, and voice memory.
+- `payload_mode: commitment`;
+- SHA-256 commitment;
+- controlled private locator;
+- encryption descriptor.
 
-BOS is the bounded ecosystem/portfolio projection. BOS SHOULD be able to export
-its atoms into Trinity-compatible process objects, but BOS-0001 MUST NOT fork a
-second general-purpose journal runtime.
+The public atom contains only a safe descriptor. The sensitive bytes stay
+outside the immutable public graph.
 
-### 11.2 Warrant
+A tombstone or superseding atom can change current views. It cannot guarantee
+erasure of plaintext already copied to a clone, cache, or evidence bundle.
+Therefore plaintext secrets MUST NOT enter immutable atoms.
 
-Warrant answers:
+## 13. Freshness
 
-- who signed or authorized a decision;
-- under which policy;
-- whether the record verifies and settles.
+Context cuts do not expire; they describe history.
 
-BOS answers:
+Claims, relation claims, and evidence may carry `valid_until`. A freshness view
+derives staleness when:
 
-- which strategic claims and risks informed that decision;
-- which model trajectories proposed alternatives;
-- what ecosystem asset and objective the decision changed.
+- `valid_until` passes;
+- a watched source commitment changes;
+- a later atom explicitly refutes or supersedes the assertion.
 
-### 11.3 Sigma
+Freshness is a projection. An embedded `freshness: current` status cannot
+override an expired payload.
 
-Sigma executes deterministic, bounded reasons where applicable. BOS records
-which claim a Sigma result supports and in which context it was consumed.
+## 14. Validation boundary
 
-Sigma MUST NOT be used as theatre around a reason that remains prose.
+### V0 — mechanical syntax
 
-### 11.4 Git and external clocks
+- strict UTF-8/LF/frontmatter;
+- duplicate YAML keys rejected;
+- closed schema and payload;
+- disclosure contract;
+- canonical revision where required.
 
-Git commits are initial repository cuts and history receipts. Bitcoin or other
-external anchors MAY strengthen historical ordering. Neither substitutes for
-semantic authority.
+### V1 — mechanical graph
 
-## 12. Views
+- unique IDs;
+- every actor, state, relation, payload reference resolves;
+- status axis matches status payload axis;
+- structural predicate registry;
+- vehicle membership has one representation;
+- context cuts are clean;
+- evidence digests match repository-local locators where applicable.
 
-All views are derived and disposable.
+### V2 — mechanical temporal scope
 
-Initial useful views:
+- trajectory context and supplied set resolve in its declared cut;
+- later atoms are not silently projected as earlier supplied inputs;
+- views declare their input universe.
 
-1. **Asset map** — repositories, capabilities, specifications, releases.
-2. **Decision spine** — claim/risk → decision → action → outcome.
-3. **Model trajectories** — independent colored paths through one decision.
-4. **Frontier** — proposed work and explicit blockers.
-5. **Staleness view** — claims whose sources or context cuts have expired.
-6. **Commercial path** — research hypothesis → product experiment → external
-   evidence → revenue/outcome.
+Historical Git lookup is required to fully validate old cuts. Until implemented,
+cross-revision cut membership remains an adjudicated limitation and MUST NOT be
+reported as mechanically complete.
 
-A view MUST identify its source set and derivation version. Omitting a rival
-trajectory while claiming completeness is a verification failure.
+### V3 — authority
 
-## 13. Validation layers
+- proposal is not decision;
+- decision names authority and context;
+- adoption names exact revision and authority;
+- action names an authorized decision;
+- adopted revisions are immutable.
 
-BOS validation is layered:
+Before genesis adoption, V3 must report `genesis candidate`, never `adopted`.
 
-### V0 — syntax
+### V4 — external contracts
 
-- frontmatter parses;
-- schema is known;
-- closed JSON Schema passes;
-- UTF-8 and duplicate-key rules are explicit.
+Warrant, Sigma, Trinity, registry, and external-clock results are authoritative
+only when represented as pinned contract/assets and verified through their own
+published interfaces.
 
-### V1 — graph integrity
+The integration prose in this revision is informative until Phase 1 registers
+those exact assets and contract revisions.
 
-- atom IDs are unique;
-- all referenced IDs resolve;
-- relation domain/range rules hold;
-- all state atoms exist on the correct axis;
-- vehicles include resolvable atoms.
+## 15. Views and completeness
 
-### V2 — temporal integrity
+A view MUST declare:
 
-- repository cuts use full commits;
-- dirty cuts carry a working-tree digest;
-- evidence observations have time and/or content identity;
-- a trajectory reads no atom created outside its cut unless explicitly marked
-  as later adjudication.
+- derivation version;
+- context cut;
+- exact source/atom universe;
+- whether it claims completeness relative to that universe.
 
-### V3 — authority integrity
+Completeness means:
 
-- proposals do not self-promote;
-- decisions name authority and reasons;
-- actions bind decisions;
-- outcomes bind evidence;
-- adopted revisions cannot be silently rewritten.
+> every qualifying object in declared universe U under cut C was included.
 
-### V4 — external verification
+It never means “every trajectory that exists globally”.
 
-- Warrant verification, Sigma execution, CI reports, and external anchors are
-  consumed through their own published verification surfaces.
+Initial views:
 
-BOS MUST NOT claim V4 merely because V0–V3 pass.
+- asset/capability map;
+- decision spine;
+- per-actor trajectories;
+- bounded frontier and blockers;
+- staleness;
+- commercial hypothesis → experiment → outcome.
 
-## 14. Required countervectors
+## 16. Countervectors
 
-Before BOS-0001 can move beyond research, permanent tests SHOULD demonstrate
-rejection or explicit bounded handling of:
+Mechanical countervectors are first-class atoms. Revision 2 already includes:
 
-1. unknown atom kind;
-2. unknown payload field;
-3. duplicate atom ID under another filename;
-4. unresolved relation;
-5. status from the wrong axis;
-6. a single `active` value used to imply governance and health;
-7. strategic score without method, source, date, and confidence;
-8. model output that self-declares adoption;
-9. action with no authority decision;
-10. decision with no reason atom;
-11. dirty repository cut without a working-tree digest;
-12. later research silently inserted into an older trajectory;
-13. nondeterministic LLM output described as replayable;
-14. view that omits a competing model trajectory;
-15. accepted atom silently edited in place;
-16. WRT/ADR prose containing an implementation-changing `MUST` with no
-    addressable requirement atom;
-17. graph growth that produces no answer to an active decision query.
+- self-authorizing genesis;
+- ambiguous dirty cut;
+- embedded semantic edge;
+- immutable plaintext secret.
 
-## 15. Commercial purpose
+Further validator tests must cover:
 
-BOS begins from the research thesis:
+- unknown kind or payload field;
+- duplicate ID;
+- unresolved actor/state/relation;
+- wrong status axis;
+- semantic predicate embedded structurally;
+- confidential embedded payload;
+- malformed revision bytes;
+- decision without authority/context;
+- adoption without exact revision;
+- trajectory using `read_set` instead of `supplied_set`;
+- duplicated vehicle membership.
 
-> Build an evidence layer for AI-agent decisions using Warrant × Sigma, sold
-> through compliance, insurance, disputes, and eventually verified precedent.
+Semantic concerns such as “does this commercial claim really address this
+market?” are adjudicated or research countervectors, not schema failures.
 
-This thesis is not adopted truth. It is a family of model-generated strategic
-claims to be decomposed, compared, tested, and revised.
+## 17. Ecosystem boundaries
 
-BOS succeeds commercially when it helps produce evidence that exists outside
-the graph:
+### Trinity
 
-- an external user verifies an Evidence Pack;
-- an integration records a real bounded agent decision;
-- a design partner changes procurement, audit, or underwriting behavior;
-- revenue funds the human steward and model/research compute;
-- a rejected commercial hypothesis is preserved early enough to prevent wasted
-  implementation.
+Trinity remains the general cognitive/process substrate. BOS is the bounded
+ecosystem and strategy projection. BOS may export process objects; it must not
+fork a second general journal before E0001 demonstrates need.
 
-Graph size, atom count, model-message count, and internal agreement are not
-commercial success metrics.
+### Warrant
 
-## 16. Phased implementation
+Warrant carries authorization and settlement. BOS carries the strategic,
+causal, and multi-actor context around a Warrant decision.
 
-### Phase 0 — typed documents
+### Sigma
 
-- closed atom schema;
-- stable IDs;
-- referential-integrity validator;
-- read-only graph projection;
-- no embedded executable hooks.
+Sigma executes deterministic bounded reasons. BOS records which atom a Sigma
+result supports and under which cut.
+
+### Git and Bitcoin
+
+Git provides repository history and clean context cuts. Bitcoin may strengthen
+external historical anchoring. Neither provides semantic authority by itself.
+
+## 18. Phase gates
+
+### Phase 0 — typed graph
+
+Exit only when:
+
+- repository validator checks V0 and V1;
+- permanent negative tests exercise Kimi's mechanical countervectors;
+- all active atoms and links resolve;
+- rev 2 receives an independent design re-gate;
+- the human explicitly chooses whether to perform genesis adoption.
 
 ### Phase 1 — ecosystem observations
 
-- register `warrant`, `sigma-glyph`, `trinity`, and `BOS` as assets;
-- import commit/release/capability observations;
-- distinguish implemented, proposed, governed, and stale surfaces.
+Exit only when:
 
-### Phase 2 — multi-model trajectories
+- Warrant, Sigma, Trinity, and BOS are registered as assets;
+- exact consumed contracts and commits are pinned;
+- one asset/capability view is reproducible.
 
-- give multiple models the same sealed context cut and objective;
-- preserve independent read/produce paths;
-- compare convergence, disagreement, omissions, and countervectors.
+### Phase 2 — multi-model trajectory
 
-### Phase 3 — authority bridge
+Exit only when BOS-E0001 contains at least three independent trajectories and a
+fourth evaluator, using the rubric below.
 
-- bind selected decisions and actions to Warrant verification;
-- keep proposal freedom separate from governed mutation.
+### Phase 3 — Warrant authority bridge
 
-### Phase 4 — deterministic reason bridge
+Exit only when proposal→decision→action/adoption is verified through a pinned
+Warrant contract with negative vectors for self-promotion and wrong authority.
 
-- attach Sigma checks only to claims that can honestly be executed;
-- preserve prose and semantic research as non-executable where necessary.
+### Phase 4 — Sigma reason bridge
+
+Exit only when at least one claim cites a deterministic Sigma result that a
+second implementation reproduces from pinned bytes.
 
 ### Phase 5 — bounded economic autonomy
 
-- define spending and action capabilities;
-- fund model work from explicit budgets;
-- require receipts and measurable external outcomes;
-- retain human and governed veto paths.
+Exit only when external value, budget authority, spending bounds, receipts, and
+human/governed veto paths are separately specified and tested.
 
-Each phase requires a separate adoption decision. Passing an earlier phase does
-not authorize the next.
+No phase transition occurs merely because time passed or prose was written.
 
-## 17. First proof obligation
+## 19. BOS-E0001 adjudication rubric
 
-A fresh model, given only a bounded BOS projection for one real ecosystem
-decision, should answer:
+A fresh evaluator receives only the bounded graph projection. For each of the
+eight experiment questions it must:
 
-1. What actually exists?
-2. What is only proposed or hypothesized?
-3. Why is this work prioritized now?
-4. What blocks the next transition?
-5. What evidence would make the work complete?
-6. Which actors proposed different paths, and from which context?
-7. Who had authority to select and execute the final path?
-8. What outcome followed?
+1. answer with at least one resolvable atom ID;
+2. distinguish observation, claim, proposal, decision, action, and outcome;
+3. identify actor and context cut where requested;
+4. state `unknown` rather than invent missing authority or evidence.
 
-If the model must read the complete chat history and every repository to answer,
-BOS has not yet compressed experience usefully.
+Pass requires:
 
-## 18. Stop rule
+- 8/8 questions answered or correctly marked unknown;
+- zero proposal-as-decision errors;
+- zero test-evidence-as-product-outcome errors;
+- zero recontextualization-as-replay errors;
+- human adjudicator and one model evaluator independently agree on the category
+  labels, with disagreements preserved.
 
-BOS work MUST stop and return to an external product or decision experiment
-when:
+This is an adjudicated experiment, not a deterministic semantic oracle.
 
-- a schema iteration has no new consumer query;
-- a validator only validates another validator without protecting a declared
-  decision boundary;
-- active atoms grow faster than resolved decisions;
-- no external outcome has been observed for the current strategy;
-- the ontology begins duplicating a Trinity, Warrant, Sigma, Git, or task-system
-  contract rather than referencing it.
+## 20. Commercial purpose
 
-This rule is part of the architecture. It is not project-management advice.
+The current commercial direction is represented by:
+
+- time-bounded research evidence
+  [`bos:evidence:research:warrant-sigma-commercial-2026-07-28`](../atoms/evidence/commercial-warrant-sigma-research.bos.md);
+- the falsifiable hypothesis
+  [`bos:hypothesis:agent-decision-evidence-commercial-wedge`](../atoms/hypothesis/agent-decision-evidence-commercial-wedge.bos.md);
+- the goal
+  [`bos:goal:sustainable-model-autonomy`](../atoms/goal/sustainable-model-autonomy.bos.md).
+
+BOS does not define commercial success as graph growth. Relevant external
+signals include:
+
+- an outside party verifies an Evidence Pack;
+- a real integration records a bounded agent decision;
+- a design partner changes audit, procurement, or underwriting behavior;
+- revenue supports the human steward and an explicit model/research budget;
+- a falsified hypothesis prevents wasted implementation.
+
+## 21. Stop rule
+
+Freeze ontology work and return to BOS-E0001 or an external product experiment
+if either occurs:
+
+1. two consecutive schema/spec revisions add no consumer query, mechanical
+   countervector, or external decision use case; or
+2. a validator is introduced only to validate another validator and protects no
+   declared V0–V4 boundary.
+
+Before Phase 2, no new kind may be added after v0.2 unless a counterexample
+shows that every existing kind loses required semantics.
+
+This is a mechanical repository-history trigger plus human adjudication of the
+consumer criterion. It is not an autonomous global oracle.

@@ -1,6 +1,6 @@
 ---
 id: bos:goal:sustainable-model-autonomy
-schema: bos.atom@v0
+schema: bos.atom@v0.2
 kind: goal
 states:
   governance: bos:status:governance:proposed
@@ -8,8 +8,14 @@ states:
   priority: bos:status:priority:now
 title: Economically sustainable bounded model autonomy
 created_at: "2026-07-28T00:00:00Z"
-created_by: human:s0fractal+model:codex
+created_by:
+  - bos:actor:human:s0fractal
+  - bos:actor:model:codex
 scope: [bos, ecosystem, business]
+disclosure:
+  classification: public
+  payload_mode: embedded
+  retention: indefinite
 relations:
   - predicate: derived_from
     object: bos:principle:freedom-authority-separation

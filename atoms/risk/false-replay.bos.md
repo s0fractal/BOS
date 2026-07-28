@@ -1,17 +1,21 @@
 ---
 id: bos:risk:false-replay
-schema: bos.atom@v0
+schema: bos.atom@v0.2
 kind: risk
 states:
   governance: bos:status:governance:proposed
   maturity: bos:status:maturity:research
 title: A recorded model context is misrepresented as deterministic replay
 created_at: "2026-07-28T00:00:00Z"
-created_by: human:s0fractal+model:codex
+created_by:
+  - bos:actor:human:s0fractal
+  - bos:actor:model:codex
 scope: [bos, machine-experience]
-relations:
-  - predicate: motivates
-    object: bos:requirement:context-cut
+disclosure:
+  classification: public
+  payload_mode: embedded
+  retention: indefinite
+relations: []
 payload:
   statement: "A context cut can preserve what a model saw without proving that a future invocation will reproduce the same inference."
   likelihood: medium

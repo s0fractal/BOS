@@ -40,7 +40,7 @@ This case is useful because it contains:
 - a recommended next path;
 - explicit uncertainty;
 - a proposed action with acceptance criteria;
-- a `trajectory` atom naming the read and produced sets.
+- a `trajectory` atom naming the supplied and produced sets.
 
 No model may adopt its own recommendation.
 

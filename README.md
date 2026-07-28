@@ -20,8 +20,8 @@ proposed a path, what authority allowed an action, and what happened next.
 
 - [`spec/BOS-0001-core.bos.md`](spec/BOS-0001-core.bos.md) — draft core
   specification.
-- [`schemas/bos-atom-v0.schema.json`](schemas/bos-atom-v0.schema.json) — strict
-  machine envelope and payload types.
+- [`schemas/bos-atom-v0.2.schema.json`](schemas/bos-atom-v0.2.schema.json) —
+  strict machine envelope and payload types.
 - [`atoms/`](atoms/) — first-class normative atoms consumed by BOS-0001.
 - [`experiments/BOS-E0001-multimodel-decision-trace.md`](experiments/BOS-E0001-multimodel-decision-trace.md)
   — first dogfood experiment.
@@ -30,6 +30,16 @@ proposed a path, what authority allowed an action, and what happened next.
 - [`archive/gemini-nodes-prototype/`](archive/gemini-nodes-prototype/) — the
   initial Gemini prototype; preserved as design archaeology, not active
   BOS-0001 data.
+
+## Validate
+
+```bash
+uv run python tools/bos_validate.py
+uv run python -m unittest -v tests.test_bos_validate
+```
+
+The validator covers mechanical V0/V1 syntax and active-graph integrity. It
+does not claim semantic truth, global completeness, or governance adoption.
 
 ## Kernel sentence
 
