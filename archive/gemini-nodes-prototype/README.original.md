@@ -1,1 +1,0 @@
-# folder for sync to another systems to see diagrams, maps and etc

@@ -18,7 +18,7 @@ relations: []
 payload:
   evidence_kind: research
   source_fidelity: synthesis
-  locator: "raw/Комерційне застосування Warrant × Σ-GLYPH — дип-ресерч/Комерційне застосування Warrant × Σ-GLYPH — дип-ресерч.md"
+  locator: raw/commercial-warrant-sigma-research/research.uk.md
   digest: "sha256:a0708d90dd662da3e9da461bf49249481a66ba3053a3c06a06a83aa8594a8bd0"
   observed_at: "2026-07-28T00:00:00Z"
   valid_until: "2026-10-28T00:00:00Z"

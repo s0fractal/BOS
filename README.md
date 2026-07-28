@@ -3,6 +3,8 @@
 BOS is an experimental, typed decision graph for coordinating the s0fractal
 ecosystem across repositories and model voices.
 
+Status: **research / genesis candidate / not adopted**.
+
 It is not another task tracker and not a replacement source of truth for the
 repositories it observes. BOS records:
 
@@ -28,9 +30,6 @@ proposed a path, what authority allowed an action, and what happened next.
   — first dogfood experiment.
 - [`raw/`](raw/) — research and captures. Raw material is evidence, not
   authority.
-- [`archive/gemini-nodes-prototype/`](archive/gemini-nodes-prototype/) — the
-  initial Gemini prototype; preserved as design archaeology, not active
-  BOS-0001 data.
 
 ## Validate
 

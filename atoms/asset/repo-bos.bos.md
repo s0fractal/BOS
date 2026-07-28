@@ -18,10 +18,10 @@ disclosure:
 relations: []
 payload:
   asset_kind: repository
-  locator: "file:///Users/s0fractal/Projects/BOS"
+  locator: "https://github.com/s0fractal/BOS"
 ---
 
 # BOS repository
 
-The local locator is an observation hint. Historical identity comes from the
-committed Git object, not this machine-specific path.
+The public repository locator is a navigation hint. Historical identity comes
+from committed Git objects and declared context cuts.
